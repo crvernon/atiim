@@ -120,7 +120,7 @@ def hypsometric_plot(df: pd.DataFrame,
 
     :param color:               Color of line and markers in plot
     :type color:                str
-    
+
     """
 
     # seaborn settings
