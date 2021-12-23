@@ -64,6 +64,46 @@ def calculate_bankfull_elevation(df: pd.DataFrame,
     return bankfull_elevation
 
 
-if __name__ == '__main__':
+def process_gage_data(gage_data_file: str,
+                      data_field_name: str = 'DATE',
+                      time_field_name: str = 'TIME',
+                      elevation_field_name: str = 'WL_ELEV_M'):
+    """Process gage data tabular file.
+    
+    :param gage_data_file:          Full path with file name and extension to the gage data file.
+    :type gage_data_file:           str
 
-    gage_data_csv = ''
+    :param data_field_name:         Name of date field in file
+    :type data_field_name:          str
+
+    :param time_field_name:         Name of time field in file
+    :type time_field_name:          str
+
+    :param elevation_field_name:    Name of elevation field in file
+    :type elevation_field_name:     str
+
+    :returns:                       [0] minumum water elevation in file
+                                    [1] maximum water elevation in file
+                                    [2] dictionary of water elevation frequency {elev:  frequency}
+    """
+
+    df = pd.read_csv(gage_data_file)
+
+    print(f"Total Time Steps:  {df.shape[0]}")
+
+    # convert date and time strings to a pandas datetime type
+    df['date_time'] = pd.to_datetime(df[data_field_name] + ' ' + df[time_field_name], infer_datetime_format=True)
+
+    # calculate the number of days in the file
+    n_days = (df['date_time'].max() - df['date_time'].min()).days
+
+    print(f"Days Verification:  {n_days}")
+
+    # sort df by date_time
+    df.sort_values(by=['date_time'], inplace=True)
+
+    min_wtr_elev = df[elevation_field_name].min()
+    max_wtr_elev = df[elevation_field_name].max()
+    d_freq = df[elevation_field_name].value_counts().to_dict()
+
+    return min_wtr_elev, max_wtr_elev, d_freq
