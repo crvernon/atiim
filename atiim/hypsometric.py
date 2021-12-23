@@ -1,15 +1,17 @@
 import rasterio
 import numpy as np
 import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+import matplotlib.ticker as ticker
+from typing import Tuple
 
 
 def hypsometric_curve(dem_file: str,
                       elevation_interval: float,
                       min_elevation: float = None,
-                      max_elevation: float = None,
-                      plot_area: bool = False,
-                      plot_percent: bool = False) -> pd.DataFrame:
-    """Calculate a hypsometric curve as an elevation-area relationship Assessment metric
+                      max_elevation: float = None) -> pd.DataFrame:
+    """Calculate a hypsometric curve as an elevation-area relationship assessment metric
     of the landform shape at a site.  Provides basic metric of opportunity for inundation and
     habitat opportunity.
 
@@ -27,13 +29,6 @@ def hypsometric_curve(dem_file: str,
     :param min_elevation:           Optional.  Maximum elevation to sample from.  Default is to use the maximum
                                     elevation of the raster as a starting point.
     :type min_elevation:            float
-
-    :param plot_area:               Optional.  Return a plot of the hypsometric curve based off of absolute area
-                                    available at each elevation.
-    :type plot_area:                bool
-
-    :param plot_percent:            Optional.  Return a plot of the hypsometric curved based off of percent area
-                                    available at each elevation.
 
     :return:                        Pandas DataFrame of elevation, area at or above the target elevation, and
                                     percent area at or above the target elevation for each elevation interval
@@ -78,15 +73,71 @@ def hypsometric_curve(dem_file: str,
         # calculate percent area per elevation slice
         df['dem_percent_area'] = df['dem_area_at_elevation'] / total_area
 
-        if plot_area:
-            ax = sns.lineplot(x="dem_area_at_elevation",
-                              y="dem_elevation",
-                              marker='o',
-                              data=df)
-        if plot_percent:
-            ax = sns.lineplot(x="dem_percent_area",
-                              y="dem_elevation",
-                              marker='o',
-                              data=df)
-
         return df
+
+
+def hypsometric_plot(df: pd.DataFrame,
+                     x_field_name: str = "dem_area_at_elevation",
+                     y_field_name: str = "dem_elevation",
+                     x_label: str = 'Area (m$^2$)',
+                     y_label: str = 'Elevation (m)',
+                     title: str = 'Hypsometric Curve',
+                     style: str = 'whitegrid',
+                     font_scale: float = 1.2,
+                     figsize: Tuple[int] = (12, 8),
+                     color: str = 'black'):
+    """Plot a hypsometric curve as an elevation-area relationship assessment metric
+    of the landform shape at a site.  Provides basic metric of opportunity for inundation and
+    habitat opportunity.
+
+    :param df:                  A pandas data frame containing data to construct a hypsometric curve.
+                                See attim.hypsometric_curve()
+    :type df:                   pd.DataFrame
+
+    :param x_field_name:        Field name of data for the x-axis
+    :type x_field_name:         str
+
+    :param y_field_name:        Field name of data for the y-axis
+    :type y_field_name:         str
+
+    :param x_label:             Label for the x-axis
+    :type x_label:              str
+
+    :param y_label:             Label for the y-axis
+    :type y_label:              str
+
+    :param title:               Title for the plot if desired.  Use None for no title.
+    :type title:                str
+
+    :param style:               Seaborn style designation
+    :type style:                str
+
+    :param font_scale:          Scaling factor for font size
+    :type font_scale:           float
+
+    :param figsize:             Tuple of figure size (x, y)
+    :type figsize:              Tuple[int]
+
+    :param color:               Color of line and markers in plot
+    :type color:                str
+    
+    """
+
+    # seaborn settings
+    sns.set(style=style, font_scale=font_scale)
+
+    # setup figure and axis
+    fig, ax = plt.subplots(figsize=figsize)
+
+    g = sns.lineplot(x=x_field_name,
+                     y=y_field_name,
+                     marker='o',
+                     data=df,
+                     color=color)
+
+    x = ax.set(ylabel=y_label,
+               xlabel=x_label,
+               title=title)
+
+    # format x axis label to bin by 1000
+    ax.xaxis.set_major_formatter(ticker.FuncFormatter(lambda x, pos: '{:}'.format(int(x / 1000)) + 'K'))
