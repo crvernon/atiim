@@ -9,6 +9,8 @@ import shapely.speedups
 
 from rasterio.plot import show
 from rasterio.features import shapes
+from rasterio.crs import CRS
+from rasterio.transform import Affine
 from shapely.geometry import shape
 from joblib import delayed, Parallel
 from scipy.ndimage import gaussian_filter1d
@@ -156,3 +158,122 @@ def create_basin_dem(basin_shp: str,
             dest.write(out_image)
 
         return output_file
+
+
+def process_slice(arr: np.ndarray,
+                  upper_elev: float,
+                  gage_gdf: gpd.GeoDataFrame,
+                  water_elev_freq: dict,
+                  run_name: str,
+                  hour_interval: float,
+                  transform: Affine,
+                  target_crs: CRS,
+                  write_shapefile: bool = True,
+                  output_directory: str = None) -> gpd.GeoDataFrame:
+    """Create a water level polygon shapefile containing a single feature that represents
+    the grid cells of an input DEM that are less than or equal to an upper elevation level.
+
+    :param arr:                     2D array from raster band read
+    :type arr:                      np.ndarray
+
+    :param upper_elev:              Elevation value for the upper bound of the elevation interval
+    :type upper_elev:               float
+
+    :param gage_gdf:                GeoDataFrame of the gage location point
+    :type gage_gdf:                 gpd.GeoDataFrame
+
+    :param water_elev_freq:         Dictionary of water elevation frequency {elev:  frequency}
+    :type water_elev_freq:          dict
+
+    :param run_name:                Name of run, all lowercase and only underscore separated.
+    :type run_name:                 str
+
+    :param hour_interval:           Time step of inundation extent.  Either 1.0 or 0.5.
+    :type hour_interval:            float
+
+    :param transform:               Trasformation object from the rasterio source raster
+    :type transform:                Affine
+
+    :param target_crs:              Coordinate reference system (CRS) object from the rasterio source raster to
+                                    be used in projecting the water level polygons.
+    :type target_crs:               CRS
+
+    :param write_shapefile:         Optional.  Choice to write the GeoDataFrame water level polygon as a shapefile.
+                                    Set output directory if True.  Default is True.
+
+    :type write_shapefile:          bool
+
+    :param output_directory:        Full path to a write-enabled directory to write output files to if write_shapefile
+                                    is set to True
+    :type output_directory:         str
+
+    :return:                        A geopandas data frame of a polygon intersecting the gage point location for
+                                    the target elevation interval.
+
+    """
+    # TODO:  fix target_crs reference from raster
+    # TODO:  account for different units
+
+    if hour_interval not in (1.0, 0.5):
+        msg = f"The hour interval of '{hour_interval}' is not currently supported.  Please use either 1.0 or 0.5 (half hour)."
+        raise AssertionError(msg)
+
+    # generate a feature id from the elevation value
+    feature_id = int(upper_elev * 100)
+
+    # create every value greater than or equal to the upper elevation to 1, others to 0
+    arx = np.where(arr <= upper_elev, 1, 0).astype(np.int16)
+
+    # build each feature based on the extracted grid cells from the array
+    results = list(
+        {'properties': {'raster_val': val}, 'geometry': shp}
+        for index, (shp, val) in enumerate(
+            shapes(arx, mask=None, transform=transform))
+    )
+
+    # list of geometries
+    geoms = list(results)
+
+    # build geopandas dataframe from geometries
+    gdf = gpd.GeoDataFrame.from_features(geoms, crs=gage_gdf.crs)
+
+    # only keep the ones
+    gdf = gdf.loc[gdf['raster_val'] == 1]
+
+    # only keep the polygon intersecting the gage
+    gdf['valid'] = gdf.intersects(gage_gdf.geometry.values[0])
+    gdf = gdf.loc[gdf['valid']].copy()
+
+    # ensure at least one polygon intersects the gage
+    if gdf.shape[0] == 0:
+        msg = "Gage location point not aligned with valid elevation in DEM.  Relocate gage location point to fall within valid elevation."
+        raise AssertionError(msg)
+
+    # dissolve into a single polygon
+    gdf = gdf.dissolve('raster_val')
+    gdf.reset_index(inplace=True)
+
+    # add fields
+    gdf['id'] = feature_id
+    gdf['frequency'] = water_elev_freq[round(upper_elev, 1)]
+    gdf['elevation'] = upper_elev
+    gdf['area'] = gdf.geometry.area
+    gdf['hectares'] = gdf['area'] * 0.0001
+    gdf['perimeter'] = gdf.geometry.length
+    gdf['hectare_hours'] = (gdf['frequency'] / hour_interval) * gdf['hectares']
+    gdf['run_name'] = run_name
+
+    # drop unneeded fields
+    gdf.drop(columns=['raster_val', 'valid'], inplace=True)
+
+    # write to file if desired
+    if write_shapefile:
+
+        if output_directory is None:
+            msg = 'Please pass a value for output_directory if choosing to write shapefile outputs.'
+            raise AssertionError(msg)
+
+        out_file = os.path.join(output_directory, f'wl_{feature_id}_{run_name}.shp')
+        gdf.to_file(out_file)
+
+    return gdf
