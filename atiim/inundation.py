@@ -277,3 +277,90 @@ def process_slice(arr: np.ndarray,
         gdf.to_file(out_file)
 
     return gdf
+
+
+# TODO:  finalize input descriptions and account for this function
+def simulate_inundation(dem_file: str,
+                        basin_shp: str,
+                        gage_shp: str,
+                        gage_data_file: str,
+                        output_directory: str,
+                        run_name: str,
+                        elevation_interval: float = 0.1,
+                        hour_interval: float = 1.0):
+    """Worker function to simulate inundation over a DEM using a stable gage location and accompanying water level
+    time series data.
+
+    :param dem_file:                Full path with file name and extension to the input DEM raster file.
+    :type dem_file:                 str
+
+    :param basin_shp:               Full path with file name and extension to the target basin shapefile
+    :type basin_shp:                str
+
+    :param gage_data_file:          Full path with file name and extension to the gage data file.
+    :type gage_data_file:           str
+
+    :param output_directory:        Full path to a write-enabled directory to write output files to
+    :type output_directory:         str
+
+    :param run_name:                Name of run, all lowercase and only underscore separated.
+    :type run_name:                 str
+
+    :param hour_interval:           Time step of inundation extent.  Either 1.0 or 0.5.
+    :type hour_interval:            float
+
+    """
+
+    # process gage data file
+    min_gage_elev, max_gage_elev, water_elev_freq = process_gage_data(gage_data_file)
+
+    # read in gage shapefile to a geodataframe
+    gage_gdf = gpd.read_file(gage_shp)
+
+    with rasterio.Env():
+        # clip the input DEM to a target basin contributing area
+        masked_dem_file = create_basin_dem(basin_shp, dem_file, output_directory, run_name)
+
+        with rasterio.open(masked_dem_file) as src:
+            # read the raster band into a number array
+            arr = src.read(1)
+
+            # convert the raster nodata value to numpy nan
+            arr[arr == src.nodata] = np.nan
+
+            raster_min = float(np.nanmin(arr))
+            raster_max = float(np.nanmax(arr))
+
+            # use the minimum bounding elevation e.g., the max of min available
+            elev_min = max([min_gage_elev, raster_min])
+
+            # use the maximum bounding elevation e.g., the min of max available
+            elev_max = min([max_gage_elev, raster_max])
+
+            # construct elevation upper bounds to process for each slice
+            elev_slices = np.arange(elev_min, elev_max + elevation_interval, elevation_interval)
+
+            print(f"Minimum DEM Elevation:  {round(raster_min, 2)}")
+            print(f"Maximum DEM Elevation:  {round(raster_max, 2)}")
+            print(f"Minimum Water-Surface Elevation:  {round(min_gage_elev, 2)}")
+            print(f"Maximum Water-Surface Elevation:  {round(max_gage_elev, 2)}")
+            print(f"Bounded DEM Elevation:  {round(min(elev_slices), 2)}")
+            print(f"Bounded DEM Elevation:  {round(max(elev_slices), 2)}")
+
+            # process all elevation slices in parallel
+            feature_list = Parallel(n_jobs=-1)(
+                delayed(process_slice)(arr,
+                                       upper_elev,
+                                       output_directory,
+                                       gage_gdf,
+                                       water_elev_freq,
+                                       run_name,
+                                       hour_interval,
+                                       src.transform,
+                                       src.crs)
+                for upper_elev in elev_slices)
+
+            # concatenate individual GeoDataFrames into a single frame
+            result_df = pd.concat(feature_list)
+
+            return result_df
