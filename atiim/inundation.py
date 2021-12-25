@@ -7,10 +7,10 @@ import geopandas as gpd
 import rasterio.mask
 import shapely.speedups
 
+from typing import Union
 from rasterio.features import shapes
 from rasterio.crs import CRS
 from rasterio.transform import Affine
-from shapely.geometry import shape
 from joblib import delayed, Parallel
 from scipy.ndimage import gaussian_filter1d
 
@@ -172,7 +172,7 @@ def process_slice(arr: np.ndarray,
                   transform: Affine,
                   target_crs: CRS,
                   write_shapefile: bool = True,
-                  output_directory: str = None) -> gpd.GeoDataFrame:
+                  output_directory: Union[str, None] = None) -> gpd.GeoDataFrame:
     """Create a water level polygon shapefile containing a single feature that represents
     the grid cells of an input DEM that are less than or equal to an upper elevation level.
 

@@ -2,11 +2,13 @@ import rasterio
 import numpy as np
 import pandas as pd
 
+from typing import Union
+
 
 def hypsometric_curve(dem_file: str,
                       elevation_interval: float,
-                      min_elevation: float = None,
-                      max_elevation: float = None) -> pd.DataFrame:
+                      min_elevation: Union[float, None] = None,
+                      max_elevation: Union[float, None] = None) -> pd.DataFrame:
     """Calculate a hypsometric curve as an elevation-area relationship assessment metric
     of the landform shape at a site.  Provides basic metric of opportunity for inundation and
     habitat opportunity.

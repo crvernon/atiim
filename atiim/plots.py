@@ -69,15 +69,15 @@ def plot_hypsometric(df: pd.DataFrame,
     # setup figure and axis
     fig, ax = plt.subplots(figsize=figsize)
 
-    g = sns.lineplot(x=x_field_name,
-                     y=y_field_name,
-                     marker='o',
-                     data=df,
-                     color=color)
+    sns.lineplot(x=x_field_name,
+                 y=y_field_name,
+                 marker='o',
+                 data=df,
+                 color=color)
 
-    x = ax.set(ylabel=y_label,
-               xlabel=x_label,
-               title=title)
+    ax.set(ylabel=y_label,
+           xlabel=x_label,
+           title=title)
 
     # format x axis label to bin by 1000
     ax.xaxis.set_major_formatter(ticker.FuncFormatter(lambda x, pos: '{:}'.format(int(x / 1000)) + 'K'))
@@ -145,15 +145,15 @@ def plot_gage_wse(gage_data_file: str,
 
     fig, ax = plt.subplots(figsize=figsize)
 
-    g = sns.lineplot(x="date_time",
-                     y=elevation_field_name,
-                     data=df,
-                     color=color,
-                     alpha=transparency)
+    sns.lineplot(x="date_time",
+                 y=elevation_field_name,
+                 data=df,
+                 color=color,
+                 alpha=transparency)
 
-    x = ax.set(ylabel='Water Surface Elevation (m)',
-               xlabel=None,
-               title='Water Surface Elevation Gage Measurements')
+    ax.set(ylabel='Water Surface Elevation (m)',
+           xlabel=None,
+           title='Water Surface Elevation Gage Measurements')
 
     plt.xlim(xmin=df['date_time'].min(), xmax=df['date_time'].max())
 
