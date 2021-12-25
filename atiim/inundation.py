@@ -7,13 +7,16 @@ import geopandas as gpd
 import rasterio.mask
 import shapely.speedups
 
-from rasterio.plot import show
 from rasterio.features import shapes
 from rasterio.crs import CRS
 from rasterio.transform import Affine
 from shapely.geometry import shape
 from joblib import delayed, Parallel
 from scipy.ndimage import gaussian_filter1d
+
+
+# enable shapely speedups for topology operations
+shapely.speedups.enable()
 
 
 def calculate_bankfull_elevation(df: pd.DataFrame,
@@ -69,7 +72,7 @@ def calculate_bankfull_elevation(df: pd.DataFrame,
 
 
 def process_gage_data(gage_data_file: str,
-                      data_field_name: str = 'DATE',
+                      date_field_name: str = 'DATE',
                       time_field_name: str = 'TIME',
                       elevation_field_name: str = 'WL_ELEV_M'):
     """Process gage data tabular file.
@@ -77,8 +80,8 @@ def process_gage_data(gage_data_file: str,
     :param gage_data_file:          Full path with file name and extension to the gage data file.
     :type gage_data_file:           str
 
-    :param data_field_name:         Name of date field in file
-    :type data_field_name:          str
+    :param date_field_name:         Name of date field in file
+    :type date_field_name:          str
 
     :param time_field_name:         Name of time field in file
     :type time_field_name:          str
@@ -96,7 +99,7 @@ def process_gage_data(gage_data_file: str,
     print(f"Total Time Steps:  {df.shape[0]}")
 
     # convert date and time strings to a pandas datetime type
-    df['date_time'] = pd.to_datetime(df[data_field_name] + ' ' + df[time_field_name], infer_datetime_format=True)
+    df['date_time'] = pd.to_datetime(df[date_field_name] + ' ' + df[time_field_name], infer_datetime_format=True)
 
     # calculate the number of days in the file
     n_days = (df['date_time'].max() - df['date_time'].min()).days
