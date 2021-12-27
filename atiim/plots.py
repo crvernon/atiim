@@ -9,86 +9,6 @@ from typing import Union
 from scipy import stats
 
 
-def plot_hypsometric(df: pd.DataFrame,
-                     output_file: str,
-                     dpi: int = 150,
-                     x_field_name: str = "dem_area_at_elevation",
-                     y_field_name: str = "dem_elevation",
-                     x_label: str = 'Area (m$^2$)',
-                     y_label: str = 'Elevation (m)',
-                     title: str = 'Hypsometric Curve',
-                     style: str = 'whitegrid',
-                     font_scale: float = 1.2,
-                     figsize: Tuple[int] = (12, 8),
-                     color: str = 'black'):
-    """Plot a hypsometric curve as an elevation-area relationship assessment metric
-    of the landform shape at a site.  Provides basic metric of opportunity for inundation and
-    habitat opportunity.
-
-    :param df:                      A pandas data frame containing data to construct a hypsometric curve.
-                                    See attim.hypsometric_curve()
-    :type df:                       pd.DataFrame
-
-    :param output_file:             Full path with file name and extension to an output file
-    :type output_file:              str
-
-    :param dpi:                     The resolution in dots per inch
-    :type dpi:                      int
-
-    :param x_field_name:            Field name of data for the x-axis
-    :type x_field_name:             str
-
-    :param y_field_name:            Field name of data for the y-axis
-    :type y_field_name:             str
-
-    :param x_label:                 Label for the x-axis
-    :type x_label:                  str
-
-    :param y_label:                 Label for the y-axis
-    :type y_label:                  str
-
-    :param title:                   Title for the plot if desired.  Use None for no title.
-    :type title:                    str
-
-    :param style:                   Seaborn style designation
-    :type style:                    str
-
-    :param font_scale:              Scaling factor for font size
-    :type font_scale:               float
-
-    :param figsize:                 Tuple of figure size (x, y)
-    :type figsize:                  Tuple[int]
-
-    :param color:                   Color of line and markers in plot
-    :type color:                    str
-
-    """
-
-    # seaborn settings
-    sns.set(style=style, font_scale=font_scale)
-
-    # setup figure and axis
-    fig, ax = plt.subplots(figsize=figsize)
-
-    sns.lineplot(x=x_field_name,
-                 y=y_field_name,
-                 marker='o',
-                 data=df,
-                 color=color)
-
-    ax.set(ylabel=y_label,
-           xlabel=x_label,
-           title=title)
-
-    # format x axis label to bin by 1000
-    ax.xaxis.set_major_formatter(ticker.FuncFormatter(lambda x, pos: '{:}'.format(int(x / 1000)) + 'K'))
-
-    # save figure
-    plt.savefig(output_file, dpi=dpi)
-
-    plt.close()
-
-
 def plot_gage_wse(gage_data_file: str,
                   output_file: str,
                   dpi: int = 150,
@@ -331,3 +251,81 @@ def plot_hectare_hours_inundation(df: pd.DataFrame,
     plt.close()
 
 
+def plot_hypsometric(df: pd.DataFrame,
+                     output_file: str,
+                     dpi: int = 150,
+                     x_field_name: str = "dem_area_at_elevation",
+                     y_field_name: str = "dem_elevation",
+                     x_label: str = 'Area (m$^2$)',
+                     y_label: str = 'Elevation (m)',
+                     title: str = 'Hypsometric Curve',
+                     style: str = 'whitegrid',
+                     font_scale: float = 1.2,
+                     figsize: Tuple[int] = (12, 8),
+                     color: str = 'black'):
+    """Plot a hypsometric curve as an elevation-area relationship assessment metric
+    of the landform shape at a site.  Provides basic metric of opportunity for inundation and
+    habitat opportunity.
+
+    :param df:                      A pandas data frame containing data to construct a hypsometric curve.
+                                    See attim.hypsometric_curve()
+    :type df:                       pd.DataFrame
+
+    :param output_file:             Full path with file name and extension to an output file
+    :type output_file:              str
+
+    :param dpi:                     The resolution in dots per inch
+    :type dpi:                      int
+
+    :param x_field_name:            Field name of data for the x-axis
+    :type x_field_name:             str
+
+    :param y_field_name:            Field name of data for the y-axis
+    :type y_field_name:             str
+
+    :param x_label:                 Label for the x-axis
+    :type x_label:                  str
+
+    :param y_label:                 Label for the y-axis
+    :type y_label:                  str
+
+    :param title:                   Title for the plot if desired.  Use None for no title.
+    :type title:                    str
+
+    :param style:                   Seaborn style designation
+    :type style:                    str
+
+    :param font_scale:              Scaling factor for font size
+    :type font_scale:               float
+
+    :param figsize:                 Tuple of figure size (x, y)
+    :type figsize:                  Tuple[int]
+
+    :param color:                   Color of line and markers in plot
+    :type color:                    str
+
+    """
+
+    # seaborn settings
+    sns.set(style=style, font_scale=font_scale)
+
+    # setup figure and axis
+    fig, ax = plt.subplots(figsize=figsize)
+
+    sns.lineplot(x=x_field_name,
+                 y=y_field_name,
+                 marker='o',
+                 data=df,
+                 color=color)
+
+    ax.set(ylabel=y_label,
+           xlabel=x_label,
+           title=title)
+
+    # format x axis label to bin by 1000
+    ax.xaxis.set_major_formatter(ticker.FuncFormatter(lambda x, pos: '{:}'.format(int(x / 1000)) + 'K'))
+
+    # save figure
+    plt.savefig(output_file, dpi=dpi)
+
+    plt.close()

@@ -11,7 +11,7 @@ def readme():
 version = re.search(r"__version__ = ['\"]([^'\"]*)['\"]", open('atiim/__init__.py').read(), re.M).group(1)
 
 setup(
-    name='cerf',
+    name='atiim',
     version=version,
     packages=find_packages(),
     url='https://github.com/crvernon/atiim',
