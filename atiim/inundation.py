@@ -1,5 +1,6 @@
 import os
 import warnings
+from typing import Union
 
 import rasterio
 import numpy as np
@@ -7,19 +8,18 @@ import pandas as pd
 import geopandas as gpd
 import rasterio.mask
 import shapely.speedups
-
-from typing import Union
 from rasterio.features import shapes
 from rasterio.crs import CRS
 from rasterio.transform import Affine
 from joblib import delayed, Parallel
 from scipy.ndimage import gaussian_filter1d
 
+from .gage import process_gage_data
 
 # enable shapely speedups for topology operations
 shapely.speedups.enable()
 
-# TODO:  ignore warning generated for a future shapely depreciation
+# TODO:  remove ignore warning generated for a future shapely depreciation in rasterio.features.shapes
 warnings.filterwarnings("ignore")
 
 
@@ -73,51 +73,6 @@ def calculate_bankfull_elevation(df: pd.DataFrame,
     bankfull_elevation = df[elevation_field_name].values[inflection_indices[0]]
 
     return bankfull_elevation
-
-
-def process_gage_data(gage_data_file: str,
-                      date_field_name: str = 'DATE',
-                      time_field_name: str = 'TIME',
-                      elevation_field_name: str = 'WL_ELEV_M'):
-    """Process gage data tabular file.
-    
-    :param gage_data_file:          Full path with file name and extension to the gage data file.
-    :type gage_data_file:           str
-
-    :param date_field_name:         Name of date field in file
-    :type date_field_name:          str
-
-    :param time_field_name:         Name of time field in file
-    :type time_field_name:          str
-
-    :param elevation_field_name:    Name of elevation field in file
-    :type elevation_field_name:     str
-
-    :returns:                       [0] minumum water elevation in file
-                                    [1] maximum water elevation in file
-                                    [2] dictionary of water elevation frequency {elev:  frequency}
-    """
-
-    df = pd.read_csv(gage_data_file)
-
-    print(f"Total Time Steps:  {df.shape[0]}")
-
-    # convert date and time strings to a pandas datetime type
-    df['date_time'] = pd.to_datetime(df[date_field_name] + ' ' + df[time_field_name], infer_datetime_format=True)
-
-    # calculate the number of days in the file
-    n_days = (df['date_time'].max() - df['date_time'].min()).days
-
-    print(f"Days Verification:  {n_days}")
-
-    # sort df by date_time
-    df.sort_values(by=['date_time'], inplace=True)
-
-    min_wtr_elev = df[elevation_field_name].min()
-    max_wtr_elev = df[elevation_field_name].max()
-    d_freq = df[elevation_field_name].value_counts().to_dict()
-
-    return min_wtr_elev, max_wtr_elev, d_freq
 
 
 def create_basin_dem(basin_shp: str,
@@ -296,7 +251,8 @@ def simulate_inundation(dem_file: str,
                         write_csv: bool = True,
                         elevation_interval: float = 0.1,
                         hour_interval: float = 1.0,
-                        n_jobs: int = -1):
+                        n_jobs: int = -1,
+                        verbose: bool = False):
     """Worker function to simulate inundation over a DEM using a stable gage location and accompanying water level
     time series data.
 
@@ -337,10 +293,13 @@ def simulate_inundation(dem_file: str,
                                     a parallel_backend context manager that sets another value for n_jobs.
     :type n_jobs:                   int
 
+    :param verbose:                 Choice to log verbosely
+    :type verbose:                  bool
+
     """
 
     # process gage data file
-    min_gage_elev, max_gage_elev, water_elev_freq = process_gage_data(gage_data_file)
+    min_gage_elev, max_gage_elev, water_elev_freq = process_gage_data(gage_data_file, verbose=verbose)
 
     # read in gage shapefile to a geodataframe
     gage_gdf = gpd.read_file(gage_shp)
@@ -370,8 +329,6 @@ def simulate_inundation(dem_file: str,
 
             print(f"Minimum DEM Elevation:  {round(raster_min, 2)}")
             print(f"Maximum DEM Elevation:  {round(raster_max, 2)}")
-            print(f"Minimum Water-Surface Elevation:  {round(min_gage_elev, 2)}")
-            print(f"Maximum Water-Surface Elevation:  {round(max_gage_elev, 2)}")
             print(f"Bounded DEM Elevation:  {round(min(elev_slices), 2)}")
             print(f"Bounded DEM Elevation:  {round(max(elev_slices), 2)}")
 
