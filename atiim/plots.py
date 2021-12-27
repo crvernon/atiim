@@ -229,17 +229,17 @@ def plot_hectare_hours_inundation(df: pd.DataFrame,
     y_padding = df['elevation'].max() * y_pad_fraction
 
     # pad max x axis value
-    x_padding = df['hectare_hours'].max() * x_pad_fraction
+    x_padding = df['hect_hours'].max() * x_pad_fraction
 
     plt.ylim(ymin=(df['elevation'].min() - y_padding),
              ymax=(df['elevation'].max() + y_padding))
 
-    plt.xlim(xmin=df['hectare_hours'].min(),
-             xmax=df['hectare_hours'].max() + x_padding)
+    plt.xlim(xmin=df['hect_hours'].min(),
+             xmax=df['hect_hours'].max() + x_padding)
 
-    plt.plot(df['hectare_hours'], df['elevation'], 'black')
+    plt.plot(df['hect_hours'], df['elevation'], 'black')
 
-    plt.fill_betweenx(df['elevation'], df['hectare_hours'], color=fill_color, alpha=transparency)
+    plt.fill_betweenx(df['elevation'], df['hect_hours'], color=fill_color, alpha=transparency)
 
     plt.title('Hectare Hours of Inundation')
     plt.xlabel('Hectare Hours')

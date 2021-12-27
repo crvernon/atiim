@@ -263,7 +263,7 @@ def process_slice(arr: np.ndarray,
     gdf['area'] = gdf.geometry.area
     gdf['hectares'] = gdf['area'] * 0.0001
     gdf['perimeter'] = gdf.geometry.length
-    gdf['hectare_hours'] = (gdf['frequency'] / hour_interval) * gdf['hectares']
+    gdf['hect_hours'] = (gdf['frequency'] / hour_interval) * gdf['hectares']
     gdf['run_name'] = run_name
 
     # drop unneeded fields
@@ -311,7 +311,7 @@ def simulate_inundation(dem_file: str,
 
     :param run_name:                Name of run, all lowercase and only underscore separated.
     :type run_name:                 str
-    
+
     :param elevation_interval:      Step for elevation to be processed.
     :type elevation_interval:       float
 
@@ -358,15 +358,15 @@ def simulate_inundation(dem_file: str,
 
             # process all elevation slices in parallel
             feature_list = Parallel(n_jobs=-1)(
-                delayed(process_slice)(arr,
-                                       upper_elev,
-                                       output_directory,
-                                       gage_gdf,
-                                       water_elev_freq,
-                                       run_name,
-                                       hour_interval,
-                                       src.transform,
-                                       src.crs)
+                delayed(process_slice)(arr=arr,
+                                       upper_elev=upper_elev,
+                                       output_directory=output_directory,
+                                       gage_gdf=gage_gdf,
+                                       water_elev_freq=water_elev_freq,
+                                       run_name=run_name,
+                                       hour_interval=hour_interval,
+                                       transform=src.transform,
+                                       target_crs=src.crs)
                 for upper_elev in elev_slices)
 
             # concatenate individual GeoDataFrames into a single frame
