@@ -6,6 +6,7 @@ import matplotlib.ticker as ticker
 
 from typing import Tuple
 from typing import Union
+from scipy import stats
 
 
 def plot_hypsometric(df: pd.DataFrame,
@@ -240,3 +241,67 @@ def plot_hectare_hours_inundation(df: pd.DataFrame,
     plt.close()
 
 
+def plot_wse_cdf():
+    """Plot the cumulative distribution function for water surface elevation from the gage data.
+
+    :param gage_data_file:          Full path with file name and extension to the gage data file.
+    :type gage_data_file:           str
+
+    :param elevation_field_name:    Name of elevation field in file
+    :type elevation_field_name:     str
+
+    :param output_file:             Full path with file name and extension to an output file
+    :type output_file:              str
+
+    :param dpi:                     The resolution in dots per inch
+    :type dpi:                      int
+
+    :param style:                   Seaborn style designation
+    :type style:                    str
+
+    :param font_scale:              Scaling factor for font size
+    :type font_scale:               float
+
+    :param figsize:                 Tuple of figure size (x, y)
+    :type figsize:                  Tuple[int]
+
+    :param fill_color:              Color of filled area in plot
+    :type fill_color:               str
+
+    :param transparency             Alpha value from 0 to 1 for transparency
+    :type transparency              float
+
+    """
+
+    sns.set(style=style, font_scale=font_scale)
+
+    fig, ax = plt.subplots(figsize=figsize)
+
+    z_sort = df[elevation_field_name].sort_values()
+
+    x_data = np.linspace(df[elevation_field_name].min(), z_sort.max() * 1.1, 100)
+
+    s, loc, scale = stats.lognorm.fit(z_sort.values)
+
+    cum_dist = np.linspace(0.0, 1.0, z_sort.shape[0])
+
+    z_cdf = pd.Series(cum_dist, index=z_sort)
+
+    ep = 1. - z_cdf
+
+    z_cdf.plot(ax=ax, drawstyle='steps', label='data', color='blue')
+
+    ax.plot(x_data, stats.lognorm.cdf(x_data, s, loc, scale), label='lognormal', color='green')
+
+    ax.set_xlabel('Water Surface Elevation (m)')
+    ax.set_ylabel('CDF')
+
+    ax.legend(loc=0, framealpha=0.5, fontsize=14)
+    plt.title('Cumulative Distribution')
+
+    plt.xlim(xmin=x_data.min(), xmax=df[elevation_field_name].max())
+
+    # save figure
+    plt.savefig(output_file, dpi=dpi)
+
+    plt.close()
