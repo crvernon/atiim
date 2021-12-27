@@ -163,3 +163,80 @@ def plot_gage_wse(gage_data_file: str,
     plt.savefig(output_file, dpi=dpi)
 
     plt.close()
+
+
+def plot_hectare_hours_inundation(df: pd.DataFrame,
+                                  output_file: str,
+                                  dpi: int = 150,
+                                  y_pad_fraction: float = 0.15,
+                                  x_pad_fraction: float = 0.05,
+                                  style: str = 'whitegrid',
+                                  font_scale: float = 1.2,
+                                  figsize: Tuple[int] = (12, 8),
+                                  fill_color: str = 'blue',
+                                  transparency: float = 0.7):
+    """Plot of the hectare hours of inundation over water surface elevations.
+
+    :param df:                      An data frame containing inundation data as a result of atiim.simulate_inundation()
+    :type df:                       pd.DataFrame
+
+    :param output_file:             Full path with file name and extension to an output file
+    :type output_file:              str
+
+    :param dpi:                     The resolution in dots per inch
+    :type dpi:                      int
+
+    :param y_pad_fraction:          A decimal fraction of the maximum elevation value to use as a padding on the Y axis
+    :type y_pad_fraction:           float
+
+    :param x_pad_fraction:          A decimal fraction of the maximum hectare hour value to use as a padding on the
+                                    X axis
+    :type x_pad_fraction:           float
+
+    :param style:                   Seaborn style designation
+    :type style:                    str
+
+    :param font_scale:              Scaling factor for font size
+    :type font_scale:               float
+
+    :param figsize:                 Tuple of figure size (x, y)
+    :type figsize:                  Tuple[int]
+
+    :param fill_color:              Color of filled area in plot
+    :type fill_color:               str
+
+    :param transparency             Alpha value from 0 to 1 for transparency
+    :type transparency              float
+
+    """
+
+    sns.set(style=style, font_scale=font_scale)
+
+    fig, ax = plt.subplots(figsize=figsize)
+
+    # pad min and max Y values for axis
+    y_padding = df['elevation'].max() * y_pad_fraction
+
+    # pad max x axis value
+    x_padding = df['hectare_hours'].max() * x_pad_fraction
+
+    plt.ylim(ymin=(df['elevation'].min() - y_padding),
+             ymax=(df['elevation'].max() + y_padding))
+
+    plt.xlim(xmin=df['hectare_hours'].min(),
+             xmax=df['hectare_hours'].max() + x_padding)
+
+    plt.plot(df['hectare_hours'], df['elevation'], 'black')
+
+    plt.fill_betweenx(df['elevation'], df['hectare_hours'], color=fill_color, alpha=transparency)
+
+    plt.title('Hectare Hours of Inundation')
+    plt.xlabel('Hectare Hours')
+    plt.ylabel('Water Surface Elevation (m)')
+
+    # save figure
+    plt.savefig(output_file, dpi=dpi)
+
+    plt.close()
+
+
