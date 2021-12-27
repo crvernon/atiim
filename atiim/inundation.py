@@ -293,6 +293,7 @@ def simulate_inundation(dem_file: str,
                         gage_data_file: str,
                         output_directory: str,
                         run_name: str,
+                        write_csv: bool = True,
                         elevation_interval: float = 0.1,
                         hour_interval: float = 1.0,
                         n_jobs: int = -1):
@@ -316,6 +317,9 @@ def simulate_inundation(dem_file: str,
 
     :param run_name:                Name of run, all lowercase and only underscore separated.
     :type run_name:                 str
+
+    :param write_csv:               Choice to write a CSV file of inundation metric outputs
+    :type write_csv:                bool
 
     :param elevation_interval:      Step for elevation to be processed.
     :type elevation_interval:       float
@@ -386,5 +390,13 @@ def simulate_inundation(dem_file: str,
 
             # concatenate individual GeoDataFrames into a single frame
             result_df = pd.concat(feature_list)
+
+            # drop geometry
+            result_df.drop(columns=['geometry'], inplace=True)
+
+            # write data frame to file removing geometry if so desired
+            if write_csv:
+                out_file = os.path.join(output_directory, f'inundation_metrics_{run_name}.csv')
+                result_df.to_csv(out_file, index=False)
 
             return result_df

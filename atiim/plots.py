@@ -10,7 +10,9 @@ from scipy import stats
 
 
 def plot_gage_wse(gage_data_file: str,
-                  output_file: str,
+                  show_plot: bool = True,
+                  save_plot: bool = False,
+                  output_file: Union[str, None] = None,
                   dpi: int = 150,
                   date_field_name: str = 'DATE',
                   time_field_name: str = 'TIME',
@@ -22,8 +24,14 @@ def plot_gage_wse(gage_data_file: str,
                   transparency: float = 0.7):
     """Create plot for water surface elevation for the gage measurement period.
 
-    :param gage_data_file:          Full path with file name and extension to the gage data file.
+    :param gage_data_file:          Full path with file name and extension to the gage data file
     :type gage_data_file:           str
+
+    :param show_plot:               If True, plot will be displayed
+    :type show_plot:                bool
+
+    :param save_plot:               If True, plot will be written to file and a value must be set for output_file
+    :type save_plot:                bool
 
     :param output_file:             Full path with file name and extension to an output file
     :type output_file:              str
@@ -70,7 +78,8 @@ def plot_gage_wse(gage_data_file: str,
                  y=elevation_field_name,
                  data=df,
                  color=color,
-                 alpha=transparency)
+                 alpha=transparency,
+                 ax=ax)
 
     ax.set(ylabel='Water Surface Elevation (m)',
            xlabel=None,
@@ -81,13 +90,25 @@ def plot_gage_wse(gage_data_file: str,
     plt.xticks(rotation=45)
 
     # save figure
-    plt.savefig(output_file, dpi=dpi)
+    if save_plot:
+
+        # ensure a value is set for output_file
+        if output_file is None:
+            raise AssertionError("If writing plot to file, you must set a value for 'output_file'")
+
+        plt.savefig(output_file, dpi=dpi)
+
+    # show plot
+    if show_plot:
+        plt.show()
 
     plt.close()
 
 
 def plot_wse_cdf(gage_data_file: str,
-                 output_file: str,
+                 show_plot: bool = True,
+                 save_plot: bool = False,
+                 output_file: Union[str, None] = None,
                  dpi: int = 150,
                  elevation_field_name: str = 'WL_ELEV_M',
                  x_padding: float = 1.05,
@@ -101,6 +122,12 @@ def plot_wse_cdf(gage_data_file: str,
 
     :param gage_data_file:          Full path with file name and extension to the gage data file.
     :type gage_data_file:           str
+
+    :param show_plot:               If True, plot will be displayed
+    :type show_plot:                bool
+
+    :param save_plot:               If True, plot will be written to file and a value must be set for output_file
+    :type save_plot:                bool
 
     :param elevation_field_name:    Name of elevation field in file
     :type elevation_field_name:     str
@@ -146,7 +173,7 @@ def plot_wse_cdf(gage_data_file: str,
 
     # create x-axis steps for water elevation
     x_data = np.linspace(df[elevation_field_name].min(),
-                         df[elevation_field_name] * x_padding,
+                         df[elevation_field_name].max() * x_padding,
                          num=n_samples)
 
     # calculate the lognormal continuous random variable and generate parameter estimates
@@ -164,19 +191,31 @@ def plot_wse_cdf(gage_data_file: str,
     ax.set_xlabel('Water Surface Elevation (m)')
     ax.set_ylabel('CDF')
     ax.legend(loc=0, framealpha=0.5)
-    plt.title('Cumulative Distribution')
+    plt.title('Cumulative Distribution of Water Surface Elevation')
 
     # set x-axis limits
     plt.xlim(xmin=x_data.min(), xmax=df[elevation_field_name].max())
 
     # save figure
-    plt.savefig(output_file, dpi=dpi)
+    if save_plot:
+
+        # ensure a value is set for output_file
+        if output_file is None:
+            raise AssertionError("If writing plot to file, you must set a value for 'output_file'")
+
+        plt.savefig(output_file, dpi=dpi)
+
+    # show plot
+    if show_plot:
+        plt.show()
 
     plt.close()
 
 
 def plot_hectare_hours_inundation(df: pd.DataFrame,
-                                  output_file: str,
+                                  show_plot: bool = True,
+                                  save_plot: bool = False,
+                                  output_file: Union[str, None] = None,
                                   dpi: int = 150,
                                   y_pad_fraction: float = 0.15,
                                   x_pad_fraction: float = 0.05,
@@ -189,6 +228,12 @@ def plot_hectare_hours_inundation(df: pd.DataFrame,
 
     :param df:                      An data frame containing inundation data as a result of atiim.simulate_inundation()
     :type df:                       pd.DataFrame
+
+    :param show_plot:               If True, plot will be displayed
+    :type show_plot:                bool
+
+    :param save_plot:               If True, plot will be written to file and a value must be set for output_file
+    :type save_plot:                bool
 
     :param output_file:             Full path with file name and extension to an output file
     :type output_file:              str
@@ -245,13 +290,25 @@ def plot_hectare_hours_inundation(df: pd.DataFrame,
     plt.ylabel('Water Surface Elevation (m)')
 
     # save figure
-    plt.savefig(output_file, dpi=dpi)
+    if save_plot:
+
+        # ensure a value is set for output_file
+        if output_file is None:
+            raise AssertionError("If writing plot to file, you must set a value for 'output_file'")
+
+        plt.savefig(output_file, dpi=dpi)
+
+    # show plot
+    if show_plot:
+        plt.show()
 
     plt.close()
 
 
 def plot_hypsometric(df: pd.DataFrame,
-                     output_file: str,
+                     show_plot: bool = True,
+                     save_plot: bool = False,
+                     output_file: Union[str, None] = None,
                      dpi: int = 150,
                      x_field_name: str = "dem_area_at_elevation",
                      y_field_name: str = "dem_elevation",
@@ -269,6 +326,12 @@ def plot_hypsometric(df: pd.DataFrame,
     :param df:                      A pandas data frame containing data to construct a hypsometric curve.
                                     See attim.hypsometric_curve()
     :type df:                       pd.DataFrame
+
+    :param show_plot:               If True, plot will be displayed
+    :type show_plot:                bool
+
+    :param save_plot:               If True, plot will be written to file and a value must be set for output_file
+    :type save_plot:                bool
 
     :param output_file:             Full path with file name and extension to an output file
     :type output_file:              str
@@ -325,6 +388,16 @@ def plot_hypsometric(df: pd.DataFrame,
     ax.xaxis.set_major_formatter(ticker.FuncFormatter(lambda x, pos: '{:}'.format(int(x / 1000)) + 'K'))
 
     # save figure
-    plt.savefig(output_file, dpi=dpi)
+    if save_plot:
+
+        # ensure a value is set for output_file
+        if output_file is None:
+            raise AssertionError("If writing plot to file, you must set a value for 'output_file'")
+
+        plt.savefig(output_file, dpi=dpi)
+
+    # show plot
+    if show_plot:
+        plt.show()
 
     plt.close()
