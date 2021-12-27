@@ -300,6 +300,9 @@ def simulate_inundation(dem_file: str,
     :param basin_shp:               Full path with file name and extension to the target basin shapefile
     :type basin_shp:                str
 
+    :param gage_shp:                Full path with file name and extension to the target gage shapefile
+    :type gage_shp:                 str
+
     :param gage_data_file:          Full path with file name and extension to the gage data file.
     :type gage_data_file:           str
 
@@ -308,6 +311,9 @@ def simulate_inundation(dem_file: str,
 
     :param run_name:                Name of run, all lowercase and only underscore separated.
     :type run_name:                 str
+    
+    :param elevation_interval:      Step for elevation to be processed.
+    :type elevation_interval:       float
 
     :param hour_interval:           Time step of inundation extent.  Either 1.0 or 0.5.
     :type hour_interval:            float
