@@ -166,6 +166,96 @@ def plot_gage_wse(gage_data_file: str,
     plt.close()
 
 
+def plot_wse_cdf(gage_data_file: str,
+                 output_file: str,
+                 dpi: int = 150,
+                 elevation_field_name: str = 'WL_ELEV_M',
+                 x_padding: float = 1.05,
+                 n_samples: int = 100,
+                 style: str = 'whitegrid',
+                 font_scale: float = 1.2,
+                 figsize: Tuple[int] = (12, 8),
+                 data_color: str = 'blue',
+                 lognorm_color: str = 'green',
+                 transparency: float = 0.7):
+    """Plot the cumulative distribution function for water surface elevation from the gage data.
+
+    :param gage_data_file:          Full path with file name and extension to the gage data file.
+    :type gage_data_file:           str
+
+    :param elevation_field_name:    Name of elevation field in file
+    :type elevation_field_name:     str
+
+    :param x_padding:               Multiplier for maximum elevation to determine an ending interval for the x-axis.
+                                    E.g., if max value is 100 and x_padding is 1.1 then the ending bound would be 110.
+    :type x_padding:                float
+
+    :param n_samples:               The number of samples to generate over the x-axis space
+    :type n_samples:                int
+
+    :param output_file:             Full path with file name and extension to an output file
+    :type output_file:              str
+
+    :param dpi:                     The resolution in dots per inch
+    :type dpi:                      int
+
+    :param style:                   Seaborn style designation
+    :type style:                    str
+
+    :param font_scale:              Scaling factor for font size
+    :type font_scale:               float
+
+    :param figsize:                 Tuple of figure size (x, y)
+    :type figsize:                  Tuple[int]
+
+    :param data_color:              Color of data line
+    :type data_color:               str
+
+    :param lognorm_color:           Color of data line
+    :type lognorm_color:            str
+
+    """
+
+    sns.set(style=style, font_scale=font_scale)
+
+    fig, ax = plt.subplots(figsize=figsize)
+
+    df = pd.read_csv(gage_data_file)
+
+    # sorted elevation ascending
+    z_sort = df[elevation_field_name].sort_values()
+
+    # create x-axis steps for water elevation
+    x_data = np.linspace(df[elevation_field_name].min(),
+                         df[elevation_field_name] * x_padding,
+                         num=n_samples)
+
+    # calculate the lognormal continuous random variable and generate parameter estimates
+    shape, location, scale = stats.lognorm.fit(z_sort)
+
+    # generate axis bounds and intervals for the cumulative dist y-axis
+    cum_dist = np.linspace(0.0, 1.0, df[elevation_field_name].shape[0])
+
+    # plot elevation data series steps
+    pd.Series(cum_dist, index=z_sort).plot(ax=ax, drawstyle='steps', label='data', color=data_color)
+
+    # plot lognormal curve
+    ax.plot(x_data, stats.lognorm.cdf(x_data, shape, location, scale), label='lognormal', color=lognorm_color)
+
+    ax.set_xlabel('Water Surface Elevation (m)')
+    ax.set_ylabel('CDF')
+    ax.legend(loc=0, framealpha=0.5)
+    plt.title('Cumulative Distribution')
+
+    # set x-axis limits
+    plt.xlim(xmin=x_data.min(), xmax=df[elevation_field_name].max())
+
+    # save figure
+    plt.savefig(output_file, dpi=dpi)
+
+    plt.close()
+
+
 def plot_hectare_hours_inundation(df: pd.DataFrame,
                                   output_file: str,
                                   dpi: int = 150,
@@ -241,67 +331,3 @@ def plot_hectare_hours_inundation(df: pd.DataFrame,
     plt.close()
 
 
-def plot_wse_cdf():
-    """Plot the cumulative distribution function for water surface elevation from the gage data.
-
-    :param gage_data_file:          Full path with file name and extension to the gage data file.
-    :type gage_data_file:           str
-
-    :param elevation_field_name:    Name of elevation field in file
-    :type elevation_field_name:     str
-
-    :param output_file:             Full path with file name and extension to an output file
-    :type output_file:              str
-
-    :param dpi:                     The resolution in dots per inch
-    :type dpi:                      int
-
-    :param style:                   Seaborn style designation
-    :type style:                    str
-
-    :param font_scale:              Scaling factor for font size
-    :type font_scale:               float
-
-    :param figsize:                 Tuple of figure size (x, y)
-    :type figsize:                  Tuple[int]
-
-    :param fill_color:              Color of filled area in plot
-    :type fill_color:               str
-
-    :param transparency             Alpha value from 0 to 1 for transparency
-    :type transparency              float
-
-    """
-
-    sns.set(style=style, font_scale=font_scale)
-
-    fig, ax = plt.subplots(figsize=figsize)
-
-    z_sort = df[elevation_field_name].sort_values()
-
-    x_data = np.linspace(df[elevation_field_name].min(), z_sort.max() * 1.1, 100)
-
-    s, loc, scale = stats.lognorm.fit(z_sort.values)
-
-    cum_dist = np.linspace(0.0, 1.0, z_sort.shape[0])
-
-    z_cdf = pd.Series(cum_dist, index=z_sort)
-
-    ep = 1. - z_cdf
-
-    z_cdf.plot(ax=ax, drawstyle='steps', label='data', color='blue')
-
-    ax.plot(x_data, stats.lognorm.cdf(x_data, s, loc, scale), label='lognormal', color='green')
-
-    ax.set_xlabel('Water Surface Elevation (m)')
-    ax.set_ylabel('CDF')
-
-    ax.legend(loc=0, framealpha=0.5, fontsize=14)
-    plt.title('Cumulative Distribution')
-
-    plt.xlim(xmin=x_data.min(), xmax=df[elevation_field_name].max())
-
-    # save figure
-    plt.savefig(output_file, dpi=dpi)
-
-    plt.close()
