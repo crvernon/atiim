@@ -1,4 +1,5 @@
 import os
+import warnings
 
 import rasterio
 import numpy as np
@@ -17,6 +18,9 @@ from scipy.ndimage import gaussian_filter1d
 
 # enable shapely speedups for topology operations
 shapely.speedups.enable()
+
+# TODO:  ignore warning generated for a future shapely depreciation
+warnings.filterwarnings("ignore")
 
 
 def calculate_bankfull_elevation(df: pd.DataFrame,
@@ -228,7 +232,6 @@ def process_slice(arr: np.ndarray,
     arx = np.where(arr <= upper_elev, 1, 0).astype(np.int16)
 
     # build each feature based on the extracted grid cells from the array
-    # TODO:  remove depreciated mechanism; see warning
     results = list(
         {'properties': {'raster_val': val}, 'geometry': shp}
         for index, (shp, val) in enumerate(
@@ -291,7 +294,8 @@ def simulate_inundation(dem_file: str,
                         output_directory: str,
                         run_name: str,
                         elevation_interval: float = 0.1,
-                        hour_interval: float = 1.0):
+                        hour_interval: float = 1.0,
+                        n_jobs: int = -1):
     """Worker function to simulate inundation over a DEM using a stable gage location and accompanying water level
     time series data.
 
@@ -318,6 +322,16 @@ def simulate_inundation(dem_file: str,
 
     :param hour_interval:           Time step of inundation extent.  Either 1.0 or 0.5.
     :type hour_interval:            float
+
+    :param n_jobs:                  The maximum number of concurrently running jobs, such as the number of Python
+                                    worker processes when backend=”multiprocessing” or the size of the thread-pool
+                                    when backend=”threading”. If -1 all CPUs are used. If 1 is given, no parallel
+                                    computing code is used at all, which is useful for debugging. For n_jobs
+                                    below -1, (n_cpus + 1 + n_jobs) are used. Thus for n_jobs = -2, all
+                                    CPUs but one are used. None is a marker for ‘unset’ that will be interpreted
+                                    as n_jobs=1 (sequential execution) unless the call is performed under
+                                    a parallel_backend context manager that sets another value for n_jobs.
+    :type n_jobs:                   int
 
     """
 
@@ -358,7 +372,7 @@ def simulate_inundation(dem_file: str,
             print(f"Bounded DEM Elevation:  {round(max(elev_slices), 2)}")
 
             # process all elevation slices in parallel
-            feature_list = Parallel(n_jobs=-1)(
+            feature_list = Parallel(n_jobs=n_jobs)(
                 delayed(process_slice)(arr=arr,
                                        upper_elev=upper_elev,
                                        output_directory=output_directory,
