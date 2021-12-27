@@ -96,8 +96,7 @@ def plot_wse_cdf(gage_data_file: str,
                  font_scale: float = 1.2,
                  figsize: Tuple[int] = (12, 8),
                  data_color: str = 'blue',
-                 lognorm_color: str = 'green',
-                 transparency: float = 0.7):
+                 lognorm_color: str = 'green'):
     """Plot the cumulative distribution function for water surface elevation from the gage data.
 
     :param gage_data_file:          Full path with file name and extension to the gage data file.

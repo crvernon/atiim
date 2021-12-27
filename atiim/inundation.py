@@ -228,6 +228,7 @@ def process_slice(arr: np.ndarray,
     arx = np.where(arr <= upper_elev, 1, 0).astype(np.int16)
 
     # build each feature based on the extracted grid cells from the array
+    # TODO:  remove depreciated mechanism; see warning
     results = list(
         {'properties': {'raster_val': val}, 'geometry': shp}
         for index, (shp, val) in enumerate(
