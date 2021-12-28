@@ -75,6 +75,14 @@ class PlotGeneral:
         if self.show_plot:
             plt.show()
 
+    def set_xaxis_to_thousands(self):
+        """Format the x-axis to show thousands as K (e.g., 15,000 as 15K)."""
+
+        # format the x-axis to show thousands as K (e.g., 15,000 as 15K)
+        self.ax.xaxis.set_major_formatter(
+            ticker.FuncFormatter(lambda x, pos: '{:}'.format(int(x / 1000)) + 'K' if x >= 1000 else int(x))
+        )
+
 
 class PlotGageData(PlotGeneral):
     """Prepare gage data for plotting.
@@ -320,14 +328,6 @@ class PlotInundationData(PlotGeneral):
 
         else:
             return pd.read_csv(self.data)
-
-    def set_xaxis_to_thousands(self):
-        """Format the x-axis to show thousands as K (e.g., 15,000 as 15K)."""
-
-        # format the x-axis to show thousands as K (e.g., 15,000 as 15K)
-        self.ax.xaxis.set_major_formatter(
-            ticker.FuncFormatter(lambda x, pos: '{:}'.format(int(x / 1000)) + 'K' if x >= 1000 else int(x))
-        )
 
 
 def plot_wse_timeseries(data: Union[str, pd.DataFrame],
@@ -964,7 +964,6 @@ def plot_inundation_area(data: Union[str, pd.DataFrame],
                          save_plot: bool = False,
                          output_file: Union[str, None] = None,
                          dpi: int = 150,
-                         x_pad_fraction: float = 0.05,
                          style: str = 'whitegrid',
                          font_scale: float = 1.2,
                          figsize: Tuple[int] = (12, 8),
@@ -987,10 +986,6 @@ def plot_inundation_area(data: Union[str, pd.DataFrame],
 
     :param dpi:                     The resolution in dots per inch
     :type dpi:                      int
-
-    :param x_pad_fraction:          A decimal fraction of the maximum hectare hour value to use as a padding on the
-                                    X axis
-    :type x_pad_fraction:           float
 
     :param style:                   Seaborn style designation
     :type style:                    str
@@ -1055,9 +1050,8 @@ def plot_hypsometric_curve(df: pd.DataFrame,
                            font_scale: float = 1.2,
                            figsize: Tuple[int] = (12, 8),
                            color: str = 'black'):
-    """Plot a hypsometric curve as an elevation-area relationship assessment metric
-    of the landform shape at a site.  Provides basic metric of opportunity for inundation and
-    habitat opportunity.
+    """Plot a hypsometric curve as an elevation-area relationship assessment metric of the landform shape at a site.
+    Provides basic metric of opportunity for inundation and habitat opportunity.
 
     :param df:                      A pandas data frame containing data to construct a hypsometric curve.
                                     See attim.hypsometric_curve()
@@ -1104,6 +1098,15 @@ def plot_hypsometric_curve(df: pd.DataFrame,
 
     """
 
+    # prepare data for plotting
+    data = PlotGeneral(style=style,
+                       font_scale=font_scale,
+                       figsize=figsize,
+                       show_plot=show_plot,
+                       save_plot=save_plot,
+                       output_file=output_file,
+                       dpi=dpi)
+
     # seaborn settings
     sns.set(style=style, font_scale=font_scale)
 
@@ -1120,20 +1123,10 @@ def plot_hypsometric_curve(df: pd.DataFrame,
            xlabel=x_label,
            title=title)
 
-    # format x axis label to bin by 1000
-    ax.xaxis.set_major_formatter(ticker.FuncFormatter(lambda x, pos: '{:}'.format(int(x / 1000)) + 'K'))
+    # format the x-axis to show thousands as K (e.g., 15,000 as 15K)
+    data.set_xaxis_to_thousands()
 
-    # save figure
-    if save_plot:
-
-        # ensure a value is set for output_file
-        if output_file is None:
-            raise AssertionError("If writing plot to file, you must set a value for 'output_file'")
-
-        plt.savefig(output_file, dpi=dpi)
-
-    # show plot
-    if show_plot:
-        plt.show()
+    # handle display or output options
+    data.output_handler()
 
     plt.close()
