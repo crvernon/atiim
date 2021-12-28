@@ -356,4 +356,4 @@ def simulate_inundation(dem_file: str,
                 out_file = os.path.join(output_directory, f'inundation_metrics_{run_name}.csv')
                 result_df.to_csv(out_file, index=False)
 
-            return result_df
+            return pd.DataFrame(result_df)
