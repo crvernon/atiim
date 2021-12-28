@@ -19,10 +19,11 @@ def import_gage_data(gage_data_file: str,
 
     """
 
-    df = pd.read_csv(gage_data_file)
-
     # convert date and time strings to a pandas datetime type
-    df['date_time'] = pd.to_datetime(df[date_field_name] + ' ' + df[time_field_name], infer_datetime_format=True)
+    df = pd.read_csv(gage_data_file,  infer_datetime_format=True, parse_dates=[[date_field_name, time_field_name]])
+
+    # rename date time field
+    df.rename(columns={f'{date_field_name}_{time_field_name}': 'date_time'}, inplace=True)
 
     return df.sort_values(by=['date_time'])
 
@@ -58,9 +59,6 @@ def process_gage_data(gage_data_file: str,
     df = import_gage_data(gage_data_file=gage_data_file,
                           date_field_name=date_field_name,
                           time_field_name=time_field_name)
-
-    # sort df by date_time
-    df.sort_values(by=['date_time'], inplace=True)
 
     min_wtr_elev = df[elevation_field_name].min()
     max_wtr_elev = df[elevation_field_name].max()

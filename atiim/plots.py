@@ -8,8 +8,80 @@ from typing import Tuple
 from typing import Union
 from scipy import stats
 
+from .gage import import_gage_data
 
-def plot_gage_wse(gage_data_file: str,
+
+class PlotGageData:
+    """Prepare gage data for plotting.
+
+    :param gage_data:               Either a full path with file name and extension to the gage data file or
+                                    a data frame processed using atiim.import_gage_data()
+    :type gage_data:                Union[str, pd.Dataframe]
+
+    :param date_field_name:         Name of date field in file
+    :type date_field_name:          str
+
+    :param time_field_name:         Name of time field in file
+    :type time_field_name:          str
+
+    :param elevation_field_name:    Name of elevation field in file
+    :type elevation_field_name:     str
+
+    """
+
+    def __init__(self,
+                 gage_data: Union[str, pd.DataFrame],
+                 date_field_name: str = 'DATE',
+                 time_field_name: str = 'TIME',
+                 elevation_field_name: str = 'WL_ELEV_M'):
+
+        self.gage_data = gage_data
+        self.date_field_name = date_field_name
+        self.time_field_name = time_field_name
+        self.elevation_field_name = elevation_field_name
+
+        # setup data frame
+        self.df = self.prepare_data()
+
+        self.z_max = self.df[elevation_field_name].max()
+        self.z_min = self.df[elevation_field_name].min()
+        self.n_records = self.df.shape[0]
+
+    def prepare_data(self) -> pd.DataFrame:
+        """Assign gage data to a data frame."""
+
+        if type(self.gage_data) == pd.DataFrame:
+            return self.gage_data
+
+        else:
+            return import_gage_data(self.gage_data, self.date_field_name, self.time_field_name)
+
+    def generate_wse_interval(self, x_padding: float = 1.05, n_samples: int = 100) -> np.ndarray:
+        """Generate an evenly spaced interval of values encompassing water surface elevation
+        for use in scaling the x-axis.
+
+        :param x_padding:               Multiplier for maximum elevation to determine an ending interval for the x-axis.
+                                        E.g., if max value is 100 and x_padding is 1.1 then the ending bound would be 110.
+        :type x_padding:                float
+
+        :param n_samples:               The number of samples to generate over the x-axis space
+        :type n_samples:                int
+
+        :return:                        NumPy array of evenly spaced water surface elevation intervals
+
+        """
+
+        return np.linspace(self.df[self.elevation_field_name].min(),
+                           self.df[self.elevation_field_name].max() * x_padding,
+                           num=n_samples)
+
+    def sorted_elevation(self) -> pd.Series:
+        """Sort elevation data in ascending order."""
+
+        return self.df[self.elevation_field_name].sort_values()
+
+
+def plot_gage_wse(gage_data: Union[str, pd.DataFrame],
                   show_plot: bool = True,
                   save_plot: bool = False,
                   output_file: Union[str, None] = None,
@@ -24,8 +96,9 @@ def plot_gage_wse(gage_data_file: str,
                   transparency: float = 0.7):
     """Create plot for water surface elevation for the gage measurement period.
 
-    :param gage_data_file:          Full path with file name and extension to the gage data file
-    :type gage_data_file:           str
+    :param gage_data:               Either a full path with file name and extension to the gage data file or
+                                    a data frame processed using atiim.import_gage_data()
+    :type gage_data:                Union[str, pd.Dataframe]
 
     :param show_plot:               If True, plot will be displayed
     :type show_plot:                bool
@@ -65,10 +138,8 @@ def plot_gage_wse(gage_data_file: str,
 
     """
 
-    df = pd.read_csv(gage_data_file)
-
-    # convert date and time strings to a pandas datetime type
-    df['date_time'] = pd.to_datetime(df[date_field_name] + ' ' + df[time_field_name], infer_datetime_format=True)
+    # prepare data for plotting
+    data = PlotGageData(gage_data, date_field_name, time_field_name, elevation_field_name)
 
     sns.set(style=style, font_scale=font_scale)
 
@@ -76,7 +147,7 @@ def plot_gage_wse(gage_data_file: str,
 
     sns.lineplot(x="date_time",
                  y=elevation_field_name,
-                 data=df,
+                 data=data.df,
                  color=color,
                  alpha=transparency,
                  ax=ax)
@@ -85,7 +156,7 @@ def plot_gage_wse(gage_data_file: str,
            xlabel=None,
            title='Water Surface Elevation Gage Measurements')
 
-    plt.xlim(xmin=df['date_time'].min(), xmax=df['date_time'].max())
+    plt.xlim(xmin=data.df['date_time'].min(), xmax=data.df['date_time'].max())
 
     plt.xticks(rotation=45)
 
@@ -105,11 +176,13 @@ def plot_gage_wse(gage_data_file: str,
     plt.close()
 
 
-def plot_wse_cdf(gage_data_file: str,
+def plot_wse_cdf(gage_data: Union[str, pd.DataFrame],
                  show_plot: bool = True,
                  save_plot: bool = False,
                  output_file: Union[str, None] = None,
                  dpi: int = 150,
+                 date_field_name: str = 'DATE',
+                 time_field_name: str = 'TIME',
                  elevation_field_name: str = 'WL_ELEV_M',
                  x_padding: float = 1.05,
                  n_samples: int = 100,
@@ -120,14 +193,21 @@ def plot_wse_cdf(gage_data_file: str,
                  lognorm_color: str = 'green'):
     """Plot the cumulative distribution function for water surface elevation from the gage data.
 
-    :param gage_data_file:          Full path with file name and extension to the gage data file.
-    :type gage_data_file:           str
+    :param gage_data:               Either a full path with file name and extension to the gage data file or
+                                    a data frame processed using atiim.import_gage_data()
+    :type gage_data:                Union[str, pd.Dataframe]
 
     :param show_plot:               If True, plot will be displayed
     :type show_plot:                bool
 
     :param save_plot:               If True, plot will be written to file and a value must be set for output_file
     :type save_plot:                bool
+
+    :param date_field_name:         Name of date field in file
+    :type date_field_name:          str
+
+    :param time_field_name:         Name of time field in file
+    :type time_field_name:          str
 
     :param elevation_field_name:    Name of elevation field in file
     :type elevation_field_name:     str
@@ -162,28 +242,27 @@ def plot_wse_cdf(gage_data_file: str,
 
     """
 
+    # prepare data for plotting
+    data = PlotGageData(gage_data, date_field_name, time_field_name, elevation_field_name)
+
     sns.set(style=style, font_scale=font_scale)
 
     fig, ax = plt.subplots(figsize=figsize)
 
-    df = pd.read_csv(gage_data_file)
+    # sort elevation value in ascending order
+    z_sorted = data.sorted_elevation()
 
-    # sorted elevation ascending
-    z_sort = df[elevation_field_name].sort_values()
-
-    # create x-axis steps for water elevation
-    x_data = np.linspace(df[elevation_field_name].min(),
-                         df[elevation_field_name].max() * x_padding,
-                         num=n_samples)
+    # generate an evenly spaced interval of values encompassing water surface elevation for use in scaling the x-axis
+    x_data = data.generate_wse_interval(x_padding=x_padding, n_samples=n_samples)
 
     # calculate the lognormal continuous random variable and generate parameter estimates
-    shape, location, scale = stats.lognorm.fit(z_sort)
+    shape, location, scale = stats.lognorm.fit(z_sorted)
 
     # generate axis bounds and intervals for the cumulative dist y-axis
-    cum_dist = np.linspace(0.0, 1.0, df[elevation_field_name].shape[0])
+    cum_dist = np.linspace(0.0, 1.0, data.n_records)
 
     # plot elevation data series steps
-    pd.Series(cum_dist, index=z_sort).plot(ax=ax, drawstyle='steps', label='data', color=data_color)
+    pd.Series(cum_dist, index=z_sorted).plot(ax=ax, drawstyle='steps', label='data', color=data_color)
 
     # plot lognormal curve
     ax.plot(x_data, stats.lognorm.cdf(x_data, shape, location, scale), label='lognormal', color=lognorm_color)
@@ -194,7 +273,7 @@ def plot_wse_cdf(gage_data_file: str,
     plt.title('Cumulative Distribution of Water Surface Elevation')
 
     # set x-axis limits
-    plt.xlim(xmin=x_data.min(), xmax=df[elevation_field_name].max())
+    plt.xlim(xmin=x_data.min(), xmax=data.z_max)
 
     # save figure
     if save_plot:
@@ -210,6 +289,54 @@ def plot_wse_cdf(gage_data_file: str,
         plt.show()
 
     plt.close()
+
+
+def plot_exceedance_probability(gage_data: Union[str, pd.DataFrame],
+                 show_plot: bool = True,
+                 save_plot: bool = False,
+                 output_file: Union[str, None] = None,
+                 dpi: int = 150,
+                 date_field_name: str = 'DATE',
+                 time_field_name: str = 'TIME',
+                 elevation_field_name: str = 'WL_ELEV_M',
+                 x_padding: float = 1.05,
+                 n_samples: int = 100,
+                 style: str = 'whitegrid',
+                 font_scale: float = 1.2,
+                 figsize: Tuple[int] = (12, 8),
+                 data_color: str = 'blue',
+                 lognorm_color: str = 'green'):
+    """Plot the probability of occurrence for individual WSEs based on period-of-record.
+
+
+    """
+
+    # prepare data for plotting
+    data = PlotGageData(gage_data, date_field_name, time_field_name, elevation_field_name)
+
+
+def plot_probability_density(gage_data: Union[str, pd.DataFrame],
+                 show_plot: bool = True,
+                 save_plot: bool = False,
+                 output_file: Union[str, None] = None,
+                 dpi: int = 150,
+                 date_field_name: str = 'DATE',
+                 time_field_name: str = 'TIME',
+                 elevation_field_name: str = 'WL_ELEV_M',
+                 x_padding: float = 1.05,
+                 n_samples: int = 100,
+                 style: str = 'whitegrid',
+                 font_scale: float = 1.2,
+                 figsize: Tuple[int] = (12, 8),
+                 data_color: str = 'blue',
+                 lognorm_color: str = 'green'):
+    """Plot the probability of occurrence for individual WSEs based on period-of-record.
+
+
+    """
+
+    # prepare data for plotting
+    data = PlotGageData(gage_data, date_field_name, time_field_name, elevation_field_name)
 
 
 def plot_hectare_hours_inundation(df: pd.DataFrame,
