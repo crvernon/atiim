@@ -1,3 +1,5 @@
+import logging
+
 import pandas as pd
 
 
@@ -69,9 +71,9 @@ def process_gage_data(gage_data_file: str,
         # calculate the number of days in the file
         n_days = (df['date_time'].max() - df['date_time'].min()).days
 
-        print(f"Total Time Steps:  {df.shape[0]}")
-        print(f"Days Verification:  {n_days}")
-        print(f"Minimum Water Surface Elevation:  {min_wtr_elev}")
-        print(f"Maximum Water Surface Elevation:  {max_wtr_elev}")
+        logging.info(f"Total Time Steps:  {df.shape[0]}")
+        logging.info(f"Days Verification:  {n_days}")
+        logging.info(f"Minimum Water Surface Elevation:  {min_wtr_elev}")
+        logging.info(f"Maximum Water Surface Elevation:  {max_wtr_elev}")
 
     return min_wtr_elev, max_wtr_elev, d_freq

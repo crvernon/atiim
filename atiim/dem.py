@@ -1,4 +1,5 @@
 import os
+import logging
 
 import rasterio
 import geopandas as gpd
@@ -31,7 +32,7 @@ def create_basin_dem(basin_shp: str,
 
     with rasterio.open(dem_file) as src:
         if src.crs is None:
-            print("Warning:  Input DEM raster does not have a defined coordinate reference system.")
+            logging.warning("Input DEM raster does not have a defined coordinate reference system.")
 
         # apply basin geometry as a mask
         out_image, out_transform = rasterio.mask.mask(src, basin_geom, crop=True)

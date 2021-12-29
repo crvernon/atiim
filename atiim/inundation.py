@@ -1,4 +1,5 @@
 import os
+import logging
 import warnings
 from typing import Union
 
@@ -19,8 +20,9 @@ from .dem import create_basin_dem
 # enable shapely speedups for topology operations
 shapely.speedups.enable()
 
+
 # TODO:  remove ignore warning generated for a future shapely depreciation in rasterio.features.shapes
-warnings.filterwarnings("ignore")
+warnings.filterwarnings('ignore')
 
 
 def process_slice(arr: np.ndarray,
@@ -74,9 +76,8 @@ def process_slice(arr: np.ndarray,
                                     the target elevation interval.
 
     """
-    # TODO:  fix target_crs reference from raster
-    # TODO:  account for different units
 
+    # TODO:  account for different units
     if hour_interval not in (1.0, 0.5):
         msg = f"The hour interval of '{hour_interval}' is not currently supported.  Please use either 1.0 or 0.5 (half hour)."
         raise AssertionError(msg)
@@ -98,7 +99,7 @@ def process_slice(arr: np.ndarray,
     geoms = list(results)
 
     # build geopandas dataframe from geometries
-    gdf = gpd.GeoDataFrame.from_features(geoms, crs=gage_gdf.crs)
+    gdf = gpd.GeoDataFrame.from_features(geoms, crs=target_crs)
 
     # only keep the ones
     gdf = gdf.loc[gdf['raster_val'] == 1]
@@ -142,7 +143,6 @@ def process_slice(arr: np.ndarray,
     return gdf
 
 
-# TODO:  finalize input descriptions and account for this function
 def simulate_inundation(dem_file: str,
                         basin_shp: str,
                         gage_shp: str,
@@ -152,7 +152,7 @@ def simulate_inundation(dem_file: str,
                         write_csv: bool = True,
                         elevation_interval: float = 0.1,
                         hour_interval: float = 1.0,
-                        n_jobs: int = -1,
+                        n_jobs: int = 1,
                         verbose: bool = False):
     """Worker function to simulate inundation over a DEM using a stable gage location and accompanying water level
     time series data.
@@ -206,6 +206,7 @@ def simulate_inundation(dem_file: str,
     gage_gdf = gpd.read_file(gage_shp)
 
     with rasterio.Env():
+
         # clip the input DEM to a target basin contributing area
         masked_dem_file = create_basin_dem(basin_shp, dem_file, output_directory, run_name)
 
@@ -227,11 +228,6 @@ def simulate_inundation(dem_file: str,
 
             # construct elevation upper bounds to process for each slice
             elev_slices = np.arange(elev_min, elev_max + elevation_interval, elevation_interval)
-
-            print(f"Minimum DEM Elevation:  {round(raster_min, 2)}")
-            print(f"Maximum DEM Elevation:  {round(raster_max, 2)}")
-            print(f"Bounded DEM Elevation:  {round(min(elev_slices), 2)}")
-            print(f"Bounded DEM Elevation:  {round(max(elev_slices), 2)}")
 
             # process all elevation slices in parallel
             feature_list = Parallel(n_jobs=n_jobs)(
@@ -256,5 +252,11 @@ def simulate_inundation(dem_file: str,
             if write_csv:
                 out_file = os.path.join(output_directory, f'inundation_metrics_{run_name}.csv')
                 result_df.to_csv(out_file, index=False)
+
+            if verbose:
+                logging.info(f"Minimum DEM Elevation:  {round(raster_min, 2)}")
+                logging.info(f"Maximum DEM Elevation:  {round(raster_max, 2)}")
+                logging.info(f"Bounded DEM Elevation:  {round(min(elev_slices), 2)}")
+                logging.info(f"Bounded DEM Elevation:  {round(max(elev_slices), 2)}")
 
             return pd.DataFrame(result_df)
