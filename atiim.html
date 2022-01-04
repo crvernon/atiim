@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>atiim package &mdash; atiim 1.0.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" type="text/css" />
+      <link rel="stylesheet" href="_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" type="text/css" />
+      <link rel="stylesheet" href="_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/atiim.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/getting_started.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="API documentation" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> atiim
+          </a>
+              <div class="version">
+                1.0.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">API documentation</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">atiim package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-atiim.dem">atiim.dem module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-atiim.gage">atiim.gage module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-atiim.hypsometric">atiim.hypsometric module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-atiim.inflection">atiim.inflection module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-atiim.inundation">atiim.inundation module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-atiim.plots">atiim.plots module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-atiim">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">atiim</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="modules.html">API documentation</a> &raquo;</li>
+      <li>atiim package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/atiim.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="atiim-package">
+<h1>atiim package<a class="headerlink" href="#atiim-package" title="Permalink to this headline"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline"></a></h2>
+</section>
+<section id="module-atiim.dem">
+<span id="atiim-dem-module"></span><h2>atiim.dem module<a class="headerlink" href="#module-atiim.dem" title="Permalink to this headline"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="atiim.dem.create_basin_dem">
+<span class="sig-prename descclassname"><span class="pre">atiim.dem.</span></span><span class="sig-name descname"><span class="pre">create_basin_dem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">basin_shp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dem_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_directory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/atiim/dem.html#create_basin_dem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atiim.dem.create_basin_dem" title="Permalink to this definition"></a></dt>
+<dd><p>Mask the input DEM using a basin geometry representative of the contributing area.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>basin_shp</strong> (<em>str</em>) – Full path with file name and extension to the target basin shapefile</p></li>
+<li><p><strong>dem_file</strong> (<em>str</em>) – Full path with file name and extension to the input DEM raster file.</p></li>
+<li><p><strong>output_directory</strong> (<em>str</em>) – Full path to a write-enabled directory to write output files to</p></li>
+<li><p><strong>run_name</strong> (<em>str</em>) – Name of run, all lowercase and only underscore separated.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Full path with file name and extension to the masked DEM raster file</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-atiim.gage">
+<span id="atiim-gage-module"></span><h2>atiim.gage module<a class="headerlink" href="#module-atiim.gage" title="Permalink to this headline"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="atiim.gage.import_gage_data">
+<span class="sig-prename descclassname"><span class="pre">atiim.gage.</span></span><span class="sig-name descname"><span class="pre">import_gage_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gage_data_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">date_field_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'DATE'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_field_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'TIME'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/atiim/gage.html#import_gage_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atiim.gage.import_gage_data" title="Permalink to this definition"></a></dt>
+<dd><p>Process gage data tabular file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gage_data_file</strong> (<em>str</em>) – Full path with file name and extension to the gage data file.</p></li>
+<li><p><strong>date_field_name</strong> (<em>str</em>) – Name of date field in file</p></li>
+<li><p><strong>time_field_name</strong> (<em>str</em>) – Name of time field in file</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>DataFrame of time series gage data sorted by date_time</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="atiim.gage.process_gage_data">
+<span class="sig-prename descclassname"><span class="pre">atiim.gage.</span></span><span class="sig-name descname"><span class="pre">process_gage_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gage_data_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">date_field_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'DATE'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_field_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'TIME'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elevation_field_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'WL_ELEV_M'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/atiim/gage.html#process_gage_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atiim.gage.process_gage_data" title="Permalink to this definition"></a></dt>
+<dd><p>Process gage data tabular file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gage_data_file</strong> (<em>str</em>) – Full path with file name and extension to the gage data file.</p></li>
+<li><p><strong>date_field_name</strong> (<em>str</em>) – Name of date field in file</p></li>
+<li><p><strong>time_field_name</strong> (<em>str</em>) – Name of time field in file</p></li>
+<li><p><strong>elevation_field_name</strong> (<em>str</em>) – Name of elevation field in file</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – Choice to log verbose description of file</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>[0] minumum water elevation in file
+[1] maximum water elevation in file
+[2] dictionary of water elevation frequency {elev:  frequency}</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-atiim.hypsometric">
+<span id="atiim-hypsometric-module"></span><h2>atiim.hypsometric module<a class="headerlink" href="#module-atiim.hypsometric" title="Permalink to this headline"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="atiim.hypsometric.hypsometric_curve">
+<span class="sig-prename descclassname"><span class="pre">atiim.hypsometric.</span></span><span class="sig-name descname"><span class="pre">hypsometric_curve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dem_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elevation_interval</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_elevation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_elevation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.core.frame.DataFrame</span></span></span><a class="reference internal" href="_modules/atiim/hypsometric.html#hypsometric_curve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atiim.hypsometric.hypsometric_curve" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate a hypsometric curve as an elevation-area relationship assessment metric
+of the landform shape at a site.  Provides basic metric of opportunity for inundation and
+habitat opportunity.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dem_file</strong> (<em>str</em>) – Full path with file name and extension to the input digital elevation model
+raster</p></li>
+<li><p><strong>elevation_interval</strong> (<em>float</em>) – Elevation sample spacing in the units of the input DEM</p></li>
+<li><p><strong>min_elevation</strong> (<em>float</em>) – Optional.  Minimum elevation to sample from.  Default is to use the minimum
+elevation of the raster as a starting point.</p></li>
+<li><p><strong>max_elevation</strong> (<em>float</em>) – Optional.  Maximum elevation to sample from.  Default is to use the maximum
+elevation of the raster as a starting point.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Pandas DataFrame of elevation, area at or above the target elevation, and
+percent area at or above the target elevation for each elevation interval</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-atiim.inflection">
+<span id="atiim-inflection-module"></span><h2>atiim.inflection module<a class="headerlink" href="#module-atiim.inflection" title="Permalink to this headline"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="atiim.inflection.calculate_bankfull_elevation">
+<span class="sig-prename descclassname"><span class="pre">atiim.inflection.</span></span><span class="sig-name descname"><span class="pre">calculate_bankfull_elevation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.core.frame.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth_sigma</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">area_field_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'area'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elevation_field_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'elevation'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/atiim/inflection.html#calculate_bankfull_elevation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atiim.inflection.calculate_bankfull_elevation" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate the bankfull elevation point, or the first point of inflection, using the index of the
+change in sign of the second derivatives of the accumulating area with increasing elevation.  If the
+input data is noisy, you may choose to smooth the data using a Gaussian filter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – Desingned for output from the atiim.simulate_inundation() function.  Though can
+be used with any data frame having an area and elevation field with data.</p></li>
+<li><p><strong>smooth_data</strong> (<em>bool</em>) – Optional.  Smooth noisy data using a Gaussian filter.  Use in combination with
+the smooth_sigma setting.</p></li>
+<li><p><strong>smooth_sigma</strong> (<em>int</em>) – Optional.  Standard deviation for Gaussian kernel.  Use when smooth_data is set
+to True.</p></li>
+<li><p><strong>area_field_name</strong> (<em>str</em>) – Optional.  Name of area field in data frame.  Default:  ‘area’</p></li>
+<li><p><strong>elevation_field_name</strong> (<em>str</em>) – Optional.  Name of elevation field in data frame.  Default ‘elevation’</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>[0] Bankfull elevation value.  First inflection point.
+[1] Bankfull area value</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-atiim.inundation">
+<span id="atiim-inundation-module"></span><h2>atiim.inundation module<a class="headerlink" href="#module-atiim.inundation" title="Permalink to this headline"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="atiim.inundation.process_slice">
+<span class="sig-prename descclassname"><span class="pre">atiim.inundation.</span></span><span class="sig-name descname"><span class="pre">process_slice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upper_elev</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gage_gdf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">geopandas.geodataframe.GeoDataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">water_elev_freq</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hour_interval</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">affine.Affine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_crs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">rasterio.crs.CRS</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">write_shapefile</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_directory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">geopandas.geodataframe.GeoDataFrame</span></span></span><a class="reference internal" href="_modules/atiim/inundation.html#process_slice"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atiim.inundation.process_slice" title="Permalink to this definition"></a></dt>
+<dd><p>Create a water level polygon shapefile containing a single feature that represents
+the grid cells of an input DEM that are less than or equal to an upper elevation level.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>arr</strong> (<em>np.ndarray</em>) – 2D array from raster band read</p></li>
+<li><p><strong>upper_elev</strong> (<em>float</em>) – Elevation value for the upper bound of the elevation interval</p></li>
+<li><p><strong>gage_gdf</strong> (<em>gpd.GeoDataFrame</em>) – GeoDataFrame of the gage location point</p></li>
+<li><p><strong>water_elev_freq</strong> (<em>dict</em>) – Dictionary of water elevation frequency {elev:  frequency}</p></li>
+<li><p><strong>run_name</strong> (<em>str</em>) – Name of run, all lowercase and only underscore separated.</p></li>
+<li><p><strong>hour_interval</strong> (<em>float</em>) – Time step of inundation extent.  Either 1.0 or 0.5.</p></li>
+<li><p><strong>transform</strong> (<em>Affine</em>) – Trasformation object from the rasterio source raster</p></li>
+<li><p><strong>target_crs</strong> (<em>CRS</em>) – Coordinate reference system (CRS) object from the rasterio source raster to
+be used in projecting the water level polygons.</p></li>
+<li><p><strong>write_shapefile</strong> (<em>bool</em>) – Optional.  Choice to write the GeoDataFrame water level polygon as a shapefile.
+Set output directory if True.  Default is True.</p></li>
+<li><p><strong>output_directory</strong> (<em>str</em>) – Full path to a write-enabled directory to write output files to if write_shapefile
+is set to True</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A geopandas data frame of a polygon intersecting the gage point location for
+the target elevation interval.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="atiim.inundation.simulate_inundation">
+<span class="sig-prename descclassname"><span class="pre">atiim.inundation.</span></span><span class="sig-name descname"><span class="pre">simulate_inundation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dem_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">basin_shp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gage_shp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gage_data_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_directory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">write_csv</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elevation_interval</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hour_interval</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/atiim/inundation.html#simulate_inundation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atiim.inundation.simulate_inundation" title="Permalink to this definition"></a></dt>
+<dd><p>Worker function to simulate inundation over a DEM using a stable gage location and accompanying water level
+time series data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dem_file</strong> (<em>str</em>) – Full path with file name and extension to the input DEM raster file.</p></li>
+<li><p><strong>basin_shp</strong> (<em>str</em>) – Full path with file name and extension to the target basin shapefile</p></li>
+<li><p><strong>gage_shp</strong> (<em>str</em>) – Full path with file name and extension to the target gage shapefile</p></li>
+<li><p><strong>gage_data_file</strong> (<em>str</em>) – Full path with file name and extension to the gage data file.</p></li>
+<li><p><strong>output_directory</strong> (<em>str</em>) – Full path to a write-enabled directory to write output files to</p></li>
+<li><p><strong>run_name</strong> (<em>str</em>) – Name of run, all lowercase and only underscore separated.</p></li>
+<li><p><strong>write_csv</strong> (<em>bool</em>) – Choice to write a CSV file of inundation metric outputs</p></li>
+<li><p><strong>elevation_interval</strong> (<em>float</em>) – Step for elevation to be processed.</p></li>
+<li><p><strong>hour_interval</strong> (<em>float</em>) – Time step of inundation extent.  Either 1.0 or 0.5.</p></li>
+<li><p><strong>n_jobs</strong> (<em>int</em>) – The maximum number of concurrently running jobs, such as the number of Python
+worker processes when backend=”multiprocessing” or the size of the thread-pool
+when backend=”threading”. If -1 all CPUs are used. If 1 is given, no parallel
+computing code is used at all, which is useful for debugging. For n_jobs
+below -1, (n_cpus + 1 + n_jobs) are used. Thus for n_jobs = -2, all
+CPUs but one are used. None is a marker for ‘unset’ that will be interpreted
+as n_jobs=1 (sequential execution) unless the call is performed under
+a parallel_backend context manager that sets another value for n_jobs.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – Choice to log verbosely</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-atiim.plots">
+<span id="atiim-plots-module"></span><h2>atiim.plots module<a class="headerlink" href="#module-atiim.plots" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="atiim.plots.PlotDem">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">atiim.plots.</span></span><span class="sig-name descname"><span class="pre">PlotDem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">pandas.core.frame.DataFrame</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elevation_interval</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_elevation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_elevation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">style</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'whitegrid'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">font_scale</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(12,</span> <span class="pre">8)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_plot</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_plot</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">150</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/atiim/plots.html#PlotDem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atiim.plots.PlotDem" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#atiim.plots.PlotGeneral" title="atiim.plots.PlotGeneral"><code class="xref py py-class docutils literal notranslate"><span class="pre">atiim.plots.PlotGeneral</span></code></a></p>
+<p>Prepare elevation data from an input DEM raster for plotting.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><em>pd.Dataframe</em><em>]</em>) – Either a full path with file name and extension to the input DEM raster or
+a data frame processed using atiim.hypsometric_curve()</p></li>
+<li><p><strong>elevation_interval</strong> (<em>float</em>) – Optional. Elevation sample spacing in the units of the input DEM. Set when using a
+DEM raster file input.</p></li>
+<li><p><strong>min_elevation</strong> (<em>float</em>) – Optional.  Minimum elevation to sample from.  Default is to use the minimum
+elevation of the raster as a starting point. Set when using a DEM raster file input.</p></li>
+<li><p><strong>max_elevation</strong> (<em>float</em>) – Optional.  Maximum elevation to sample from.  Default is to use the maximum
+elevation of the raster as a starting point. Set when using a DEM raster file input.</p></li>
+<li><p><strong>style</strong> (<em>str</em>) – Seaborn style designation</p></li>
+<li><p><strong>font_scale</strong> (<em>float</em>) – Scaling factor for font size</p></li>
+<li><p><strong>figsize</strong> (<em>Tuple</em><em>[</em><em>int</em><em>]</em>) – Tuple of figure size (x, y)</p></li>
+<li><p><strong>show_plot</strong> (<em>bool</em>) – If True, plot will be displayed</p></li>
+<li><p><strong>save_plot</strong> (<em>bool</em>) – If True, plot will be written to file and a value must be set for output_file</p></li>
+<li><p><strong>output_file</strong> (<em>str</em>) – Full path with file name and extension to an output file</p></li>
+<li><p><strong>dpi</strong> (<em>int</em>) – The resolution in dots per inch</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="atiim.plots.PlotDem.prepare_data">
+<span class="sig-name descname"><span class="pre">prepare_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.core.frame.DataFrame</span></span></span><a class="reference internal" href="_modules/atiim/plots.html#PlotDem.prepare_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atiim.plots.PlotDem.prepare_data" title="Permalink to this definition"></a></dt>
+<dd><p>Assign input data to a data frame.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="atiim.plots.PlotGageData">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">atiim.plots.</span></span><span class="sig-name descname"><span class="pre">PlotGageData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">pandas.core.frame.DataFrame</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">date_field_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'DATE'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_field_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'TIME'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elevation_field_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'WL_ELEV_M'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">style</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'whitegrid'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">font_scale</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(12,</span> <span class="pre">8)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_plot</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_plot</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">150</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/atiim/plots.html#PlotGageData"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atiim.plots.PlotGageData" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#atiim.plots.PlotGeneral" title="atiim.plots.PlotGeneral"><code class="xref py py-class docutils literal notranslate"><span class="pre">atiim.plots.PlotGeneral</span></code></a></p>
+<p>Prepare gage data for plotting.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gage_data</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><em>pd.Dataframe</em><em>]</em>) – Either a full path with file name and extension to the gage data file or
+a data frame processed using atiim.import_gage_data()</p></li>
+<li><p><strong>date_field_name</strong> (<em>str</em>) – Name of date field in file</p></li>
+<li><p><strong>time_field_name</strong> (<em>str</em>) – Name of time field in file</p></li>
+<li><p><strong>elevation_field_name</strong> (<em>str</em>) – Name of elevation field in file</p></li>
+<li><p><strong>style</strong> (<em>str</em>) – Seaborn style designation</p></li>
+<li><p><strong>font_scale</strong> (<em>float</em>) – Scaling factor for font size</p></li>
+<li><p><strong>figsize</strong> (<em>Tuple</em><em>[</em><em>int</em><em>]</em>) – Tuple of figure size (x, y)</p></li>
+<li><p><strong>show_plot</strong> (<em>bool</em>) – If True, plot will be displayed</p></li>
+<li><p><strong>save_plot</strong> (<em>bool</em>) – If True, plot will be written to file and a value must be set for output_file</p></li>
+<li><p><strong>output_file</strong> (<em>str</em>) – Full path with file name and extension to an output file</p></li>
+<li><p><strong>dpi</strong> (<em>int</em>) – The resolution in dots per inch</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="atiim.plots.PlotGageData.calculate_cdf">
+<span class="sig-name descname"><span class="pre">calculate_cdf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="_modules/atiim/plots.html#PlotGageData.calculate_cdf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atiim.plots.PlotGageData.calculate_cdf" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate the cumulative distribution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>np.ndarray</em>) – Input data for x-axis values</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>NumPy array of CDF outputs</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="atiim.plots.PlotGageData.calculate_exceedance_probability">
+<span class="sig-name descname"><span class="pre">calculate_exceedance_probability</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.core.series.Series</span></span></span><a class="reference internal" href="_modules/atiim/plots.html#PlotGageData.calculate_exceedance_probability"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atiim.plots.PlotGageData.calculate_exceedance_probability" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate a y-axis series of exceedance probilites as a percentage.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="atiim.plots.PlotGageData.calculate_lognorm_fit">
+<span class="sig-name descname"><span class="pre">calculate_lognorm_fit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/atiim/plots.html#PlotGageData.calculate_lognorm_fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atiim.plots.PlotGageData.calculate_lognorm_fit" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate the lognormal continuous random variable and generate parameter estimates. Uses
+Maximum Likelihood Estimateion (MLE).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>[0] shape parameter estimates
+[1] location parameters
+[2] scale parameters</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="atiim.plots.PlotGageData.calculate_pdf">
+<span class="sig-name descname"><span class="pre">calculate_pdf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="_modules/atiim/plots.html#PlotGageData.calculate_pdf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atiim.plots.PlotGageData.calculate_pdf" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate the probability density.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>np.ndarray</em>) – Input data for x-axis values</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>NumPy array of PDF outputs</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="atiim.plots.PlotGageData.generate_wse_interval">
+<span class="sig-name descname"><span class="pre">generate_wse_interval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x_padding</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_samples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="_modules/atiim/plots.html#PlotGageData.generate_wse_interval"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atiim.plots.PlotGageData.generate_wse_interval" title="Permalink to this definition"></a></dt>
+<dd><p>Generate an evenly spaced interval of values encompassing water surface elevation
+for use in scaling the x-axis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x_padding</strong> (<em>float</em>) – Multiplier for maximum elevation to determine an ending interval for the x-axis.
+E.g., if max value is 100 and x_padding is 1.1 then the ending bound would be 110.</p></li>
+<li><p><strong>n_samples</strong> (<em>int</em>) – The number of samples to generate over the x-axis space</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>NumPy array of evenly spaced water surface elevation intervals</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="atiim.plots.PlotGageData.prepare_data">
+<span class="sig-name descname"><span class="pre">prepare_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.core.frame.DataFrame</span></span></span><a class="reference internal" href="_modules/atiim/plots.html#PlotGageData.prepare_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atiim.plots.PlotGageData.prepare_data" title="Permalink to this definition"></a></dt>
+<dd><p>Assign gage data to a data frame.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="atiim.plots.PlotGageData.set_cumulative_series">
+<span class="sig-name descname"><span class="pre">set_cumulative_series</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.core.series.Series</span></span></span><a class="reference internal" href="_modules/atiim/plots.html#PlotGageData.set_cumulative_series"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atiim.plots.PlotGageData.set_cumulative_series" title="Permalink to this definition"></a></dt>
+<dd><p>Generate axis series and intervals for the cumulative distribution y-axis.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="atiim.plots.PlotGageData.sorted_elevation">
+<span class="sig-name descname"><span class="pre">sorted_elevation</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.core.series.Series</span></span></span><a class="reference internal" href="_modules/atiim/plots.html#PlotGageData.sorted_elevation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atiim.plots.PlotGageData.sorted_elevation" title="Permalink to this definition"></a></dt>
+<dd><p>Sort elevation data in ascending order.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="atiim.plots.PlotGeneral">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">atiim.plots.</span></span><span class="sig-name descname"><span class="pre">PlotGeneral</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">style</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'whitegrid'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">font_scale</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(12,</span> <span class="pre">8)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_plot</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_plot</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">150</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/atiim/plots.html#PlotGeneral"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atiim.plots.PlotGeneral" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>General plotting setup and option handling.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>style</strong> (<em>str</em>) – Seaborn style designation</p></li>
+<li><p><strong>font_scale</strong> (<em>float</em>) – Scaling factor for font size</p></li>
+<li><p><strong>figsize</strong> (<em>Tuple</em><em>[</em><em>int</em><em>]</em>) – Tuple of figure size (x, y)</p></li>
+<li><p><strong>show_plot</strong> (<em>bool</em>) – If True, plot will be displayed</p></li>
+<li><p><strong>save_plot</strong> (<em>bool</em>) – If True, plot will be written to file and a value must be set for output_file</p></li>
+<li><p><strong>output_file</strong> (<em>str</em>) – Full path with file name and extension to an output file</p></li>
+<li><p><strong>dpi</strong> (<em>int</em>) – The resolution in dots per inch</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="atiim.plots.PlotGeneral.output_handler">
+<span class="sig-name descname"><span class="pre">output_handler</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/atiim/plots.html#PlotGeneral.output_handler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atiim.plots.PlotGeneral.output_handler" title="Permalink to this definition"></a></dt>
+<dd><p>Handle plot display and output options.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="atiim.plots.PlotGeneral.set_xaxis_to_thousands">
+<span class="sig-name descname"><span class="pre">set_xaxis_to_thousands</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/atiim/plots.html#PlotGeneral.set_xaxis_to_thousands"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atiim.plots.PlotGeneral.set_xaxis_to_thousands" title="Permalink to this definition"></a></dt>
+<dd><p>Format the x-axis to show thousands as K (e.g., 15,000 as 15K).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="atiim.plots.PlotInundationData">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">atiim.plots.</span></span><span class="sig-name descname"><span class="pre">PlotInundationData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">pandas.core.frame.DataFrame</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">style</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'whitegrid'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">font_scale</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(12,</span> <span class="pre">8)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_plot</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_plot</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">150</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/atiim/plots.html#PlotInundationData"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atiim.plots.PlotInundationData" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#atiim.plots.PlotGeneral" title="atiim.plots.PlotGeneral"><code class="xref py py-class docutils literal notranslate"><span class="pre">atiim.plots.PlotGeneral</span></code></a></p>
+<p>Prepare inundation data for plotting.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><em>pd.Dataframe</em><em>]</em>) – Either a full path with file name and extension to the inundation data file or
+a data frame processed using atiim.simulate_inundation()</p></li>
+<li><p><strong>style</strong> (<em>str</em>) – Seaborn style designation</p></li>
+<li><p><strong>font_scale</strong> (<em>float</em>) – Scaling factor for font size</p></li>
+<li><p><strong>figsize</strong> (<em>Tuple</em><em>[</em><em>int</em><em>]</em>) – Tuple of figure size (x, y)</p></li>
+<li><p><strong>show_plot</strong> (<em>bool</em>) – If True, plot will be displayed</p></li>
+<li><p><strong>save_plot</strong> (<em>bool</em>) – If True, plot will be written to file and a value must be set for output_file</p></li>
+<li><p><strong>output_file</strong> (<em>str</em>) – Full path with file name and extension to an output file</p></li>
+<li><p><strong>dpi</strong> (<em>int</em>) – The resolution in dots per inch</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="atiim.plots.PlotInundationData.FLD_AREA">
+<span class="sig-name descname"><span class="pre">FLD_AREA</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'area'</span></em><a class="headerlink" href="#atiim.plots.PlotInundationData.FLD_AREA" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="atiim.plots.PlotInundationData.FLD_ELEVATION">
+<span class="sig-name descname"><span class="pre">FLD_ELEVATION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'elevation'</span></em><a class="headerlink" href="#atiim.plots.PlotInundationData.FLD_ELEVATION" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="atiim.plots.PlotInundationData.FLD_FREQUENCY">
+<span class="sig-name descname"><span class="pre">FLD_FREQUENCY</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'frequency'</span></em><a class="headerlink" href="#atiim.plots.PlotInundationData.FLD_FREQUENCY" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="atiim.plots.PlotInundationData.FLD_HECTARES">
+<span class="sig-name descname"><span class="pre">FLD_HECTARES</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'hectares'</span></em><a class="headerlink" href="#atiim.plots.PlotInundationData.FLD_HECTARES" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="atiim.plots.PlotInundationData.FLD_HECTARE_HOURS">
+<span class="sig-name descname"><span class="pre">FLD_HECTARE_HOURS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'hect_hours'</span></em><a class="headerlink" href="#atiim.plots.PlotInundationData.FLD_HECTARE_HOURS" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="atiim.plots.PlotInundationData.FLD_ID">
+<span class="sig-name descname"><span class="pre">FLD_ID</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'id'</span></em><a class="headerlink" href="#atiim.plots.PlotInundationData.FLD_ID" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="atiim.plots.PlotInundationData.FLD_PERIMETER">
+<span class="sig-name descname"><span class="pre">FLD_PERIMETER</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'perimeter'</span></em><a class="headerlink" href="#atiim.plots.PlotInundationData.FLD_PERIMETER" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="atiim.plots.PlotInundationData.prepare_data">
+<span class="sig-name descname"><span class="pre">prepare_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.core.frame.DataFrame</span></span></span><a class="reference internal" href="_modules/atiim/plots.html#PlotInundationData.prepare_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atiim.plots.PlotInundationData.prepare_data" title="Permalink to this definition"></a></dt>
+<dd><p>Assign input data to a data frame.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="atiim.plots.plot_hypsometric_curve">
+<span class="sig-prename descclassname"><span class="pre">atiim.plots.</span></span><span class="sig-name descname"><span class="pre">plot_hypsometric_curve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">pandas.core.frame.DataFrame</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elevation_interval</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_elevation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_elevation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_plot</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_plot</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">150</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_field_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'dem_area_at_elevation'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_field_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'dem_elevation'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'Area</span> <span class="pre">(m$^2$)'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'Elevation</span> <span class="pre">(m)'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'Hypsometric</span> <span class="pre">Curve'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">style</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'whitegrid'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">font_scale</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(12,</span> <span class="pre">8)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'black'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/atiim/plots.html#plot_hypsometric_curve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atiim.plots.plot_hypsometric_curve" title="Permalink to this definition"></a></dt>
+<dd><p>Plot a hypsometric curve as an elevation-area relationship assessment metric of the landform shape at a site.
+Provides basic metric of opportunity for inundation and habitat opportunity.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><em>pd.Dataframe</em><em>]</em>) – Either a full path with file name and extension to the input DEM raster or
+a data frame processed using atiim.hypsometric_curve()</p></li>
+<li><p><strong>elevation_interval</strong> (<em>float</em>) – Optional. Elevation sample spacing in the units of the input DEM. Set when using a
+DEM raster file input.</p></li>
+<li><p><strong>min_elevation</strong> (<em>float</em>) – Optional.  Minimum elevation to sample from.  Default is to use the minimum
+elevation of the raster as a starting point. Set when using a DEM raster file input.</p></li>
+<li><p><strong>max_elevation</strong> (<em>float</em>) – Optional.  Maximum elevation to sample from.  Default is to use the maximum
+elevation of the raster as a starting point. Set when using a DEM raster file input.</p></li>
+<li><p><strong>show_plot</strong> (<em>bool</em>) – If True, plot will be displayed</p></li>
+<li><p><strong>save_plot</strong> (<em>bool</em>) – If True, plot will be written to file and a value must be set for output_file</p></li>
+<li><p><strong>output_file</strong> (<em>str</em>) – Full path with file name and extension to an output file</p></li>
+<li><p><strong>dpi</strong> (<em>int</em>) – The resolution in dots per inch</p></li>
+<li><p><strong>x_field_name</strong> (<em>str</em>) – Field name of data for the x-axis</p></li>
+<li><p><strong>y_field_name</strong> (<em>str</em>) – Field name of data for the y-axis</p></li>
+<li><p><strong>x_label</strong> (<em>str</em>) – Label for the x-axis</p></li>
+<li><p><strong>y_label</strong> (<em>str</em>) – Label for the y-axis</p></li>
+<li><p><strong>title</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><em>None</em><em>]</em>) – Title for the plot if desired.  Use None for no title.</p></li>
+<li><p><strong>style</strong> (<em>str</em>) – Seaborn style designation</p></li>
+<li><p><strong>font_scale</strong> (<em>float</em>) – Scaling factor for font size</p></li>
+<li><p><strong>figsize</strong> (<em>Tuple</em><em>[</em><em>int</em><em>]</em>) – Tuple of figure size (x, y)</p></li>
+<li><p><strong>color</strong> (<em>str</em>) – Color of line and markers in plot</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="atiim.plots.plot_inundation_area">
+<span class="sig-prename descclassname"><span class="pre">atiim.plots.</span></span><span class="sig-name descname"><span class="pre">plot_inundation_area</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">pandas.core.frame.DataFrame</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_plot</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_plot</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">150</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">style</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'whitegrid'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">font_scale</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(12,</span> <span class="pre">8)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'Inundation</span> <span class="pre">Area</span> <span class="pre">by</span> <span class="pre">Water</span> <span class="pre">Surface</span> <span class="pre">Elevation'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inflection_pt_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">14</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/atiim/plots.html#plot_inundation_area"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atiim.plots.plot_inundation_area" title="Permalink to this definition"></a></dt>
+<dd><p>Plot area of inundation through the water surface elevation time series.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><em>pd.DataFrame</em><em>]</em>) – An data frame or CSV file containing inundation data as a result of
+atiim.simulate_inundation()</p></li>
+<li><p><strong>show_plot</strong> (<em>bool</em>) – If True, plot will be displayed</p></li>
+<li><p><strong>save_plot</strong> (<em>bool</em>) – If True, plot will be written to file and a value must be set for output_file</p></li>
+<li><p><strong>output_file</strong> (<em>str</em>) – Full path with file name and extension to an output file</p></li>
+<li><p><strong>dpi</strong> (<em>int</em>) – The resolution in dots per inch</p></li>
+<li><p><strong>style</strong> (<em>str</em>) – Seaborn style designation</p></li>
+<li><p><strong>font_scale</strong> (<em>float</em>) – Scaling factor for font size</p></li>
+<li><p><strong>figsize</strong> (<em>Tuple</em><em>[</em><em>int</em><em>]</em>) – Tuple of figure size (x, y)</p></li>
+</ul>
+</dd>
+</dl>
+<p>:param title                    Plot title.  If None, then no title will be displayed.
+:type title                     Union[str, None]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>inflection_pt_size</strong> (<em>int</em>) – Size of the inflection point marker</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="atiim.plots.plot_inundation_hectare_hours">
+<span class="sig-prename descclassname"><span class="pre">atiim.plots.</span></span><span class="sig-name descname"><span class="pre">plot_inundation_hectare_hours</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">pandas.core.frame.DataFrame</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_plot</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_plot</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">150</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_pad_fraction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.15</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_pad_fraction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">style</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'whitegrid'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">font_scale</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(12,</span> <span class="pre">8)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fill_color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'#005AB5'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transparency</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.7</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'Hectare</span> <span class="pre">Hours</span> <span class="pre">of</span> <span class="pre">Inundation'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/atiim/plots.html#plot_inundation_hectare_hours"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atiim.plots.plot_inundation_hectare_hours" title="Permalink to this definition"></a></dt>
+<dd><p>Plot of the hectare hours of inundation over water surface elevations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><em>pd.DataFrame</em><em>]</em>) – An data frame or CSV file containing inundation data as a result of
+atiim.simulate_inundation()</p></li>
+<li><p><strong>show_plot</strong> (<em>bool</em>) – If True, plot will be displayed</p></li>
+<li><p><strong>save_plot</strong> (<em>bool</em>) – If True, plot will be written to file and a value must be set for output_file</p></li>
+<li><p><strong>output_file</strong> (<em>str</em>) – Full path with file name and extension to an output file</p></li>
+<li><p><strong>dpi</strong> (<em>int</em>) – The resolution in dots per inch</p></li>
+<li><p><strong>y_pad_fraction</strong> (<em>float</em>) – A decimal fraction of the maximum elevation value to use as a padding on the Y axis</p></li>
+<li><p><strong>x_pad_fraction</strong> (<em>float</em>) – A decimal fraction of the maximum hectare hour value to use as a padding on the
+X axis</p></li>
+<li><p><strong>style</strong> (<em>str</em>) – Seaborn style designation</p></li>
+<li><p><strong>font_scale</strong> (<em>float</em>) – Scaling factor for font size</p></li>
+<li><p><strong>figsize</strong> (<em>Tuple</em><em>[</em><em>int</em><em>]</em>) – Tuple of figure size (x, y)</p></li>
+<li><p><strong>fill_color</strong> (<em>str</em>) – Color of filled area in plot</p></li>
+</ul>
+</dd>
+</dl>
+<p>:param transparency             Alpha value from 0 to 1 for transparency
+:type transparency              float</p>
+<p>:param title                    Plot title.  If None, then no title will be displayed.
+:type title                     Union[str, None]</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="atiim.plots.plot_inundation_perimeter">
+<span class="sig-prename descclassname"><span class="pre">atiim.plots.</span></span><span class="sig-name descname"><span class="pre">plot_inundation_perimeter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">pandas.core.frame.DataFrame</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_plot</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_plot</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">150</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_pad_fraction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">style</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'whitegrid'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">font_scale</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(12,</span> <span class="pre">8)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'Inundation</span> <span class="pre">Perimeter</span> <span class="pre">by</span> <span class="pre">Water</span> <span class="pre">Surface</span> <span class="pre">Elevation'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/atiim/plots.html#plot_inundation_perimeter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atiim.plots.plot_inundation_perimeter" title="Permalink to this definition"></a></dt>
+<dd><p>Plot perimeter of inundation through the water surface elevation time series.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><em>pd.DataFrame</em><em>]</em>) – An data frame or CSV file containing inundation data as a result of
+atiim.simulate_inundation()</p></li>
+<li><p><strong>show_plot</strong> (<em>bool</em>) – If True, plot will be displayed</p></li>
+<li><p><strong>save_plot</strong> (<em>bool</em>) – If True, plot will be written to file and a value must be set for output_file</p></li>
+<li><p><strong>output_file</strong> (<em>str</em>) – Full path with file name and extension to an output file</p></li>
+<li><p><strong>dpi</strong> (<em>int</em>) – The resolution in dots per inch</p></li>
+<li><p><strong>x_pad_fraction</strong> (<em>float</em>) – A decimal fraction of the maximum hectare hour value to use as a padding on the
+X axis</p></li>
+<li><p><strong>style</strong> (<em>str</em>) – Seaborn style designation</p></li>
+<li><p><strong>font_scale</strong> (<em>float</em>) – Scaling factor for font size</p></li>
+<li><p><strong>figsize</strong> (<em>Tuple</em><em>[</em><em>int</em><em>]</em>) – Tuple of figure size (x, y)</p></li>
+</ul>
+</dd>
+</dl>
+<p>:param title                    Plot title.  If None, then no title will be displayed.
+:type title                     Union[str, None]</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="atiim.plots.plot_wse_cumulative_distribution">
+<span class="sig-prename descclassname"><span class="pre">atiim.plots.</span></span><span class="sig-name descname"><span class="pre">plot_wse_cumulative_distribution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">pandas.core.frame.DataFrame</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_plot</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_plot</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">150</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">date_field_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'DATE'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_field_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'TIME'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elevation_field_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'WL_ELEV_M'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_padding</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_samples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">style</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'whitegrid'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">font_scale</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(12,</span> <span class="pre">8)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'#005AB5'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lognorm_color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'#DC3220'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'Cumulative</span> <span class="pre">Distribution</span> <span class="pre">of</span> <span class="pre">Water</span> <span class="pre">Surface</span> <span class="pre">Elevation'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/atiim/plots.html#plot_wse_cumulative_distribution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atiim.plots.plot_wse_cumulative_distribution" title="Permalink to this definition"></a></dt>
+<dd><p>Plot the cumulative distribution function for water surface elevation from the gage data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><em>pd.Dataframe</em><em>]</em>) – Either a full path with file name and extension to the gage data file or
+a data frame processed using atiim.import_gage_data()</p></li>
+<li><p><strong>show_plot</strong> (<em>bool</em>) – If True, plot will be displayed</p></li>
+<li><p><strong>save_plot</strong> (<em>bool</em>) – If True, plot will be written to file and a value must be set for output_file</p></li>
+<li><p><strong>date_field_name</strong> (<em>str</em>) – Name of date field in file</p></li>
+<li><p><strong>time_field_name</strong> (<em>str</em>) – Name of time field in file</p></li>
+<li><p><strong>elevation_field_name</strong> (<em>str</em>) – Name of elevation field in file</p></li>
+<li><p><strong>x_padding</strong> (<em>float</em>) – Multiplier for maximum elevation to determine an ending interval for the x-axis.
+E.g., if max value is 100 and x_padding is 1.1 then the ending bound would be 110.</p></li>
+<li><p><strong>n_samples</strong> (<em>int</em>) – The number of samples to generate over the x-axis space</p></li>
+<li><p><strong>output_file</strong> (<em>str</em>) – Full path with file name and extension to an output file</p></li>
+<li><p><strong>dpi</strong> (<em>int</em>) – The resolution in dots per inch</p></li>
+<li><p><strong>style</strong> (<em>str</em>) – Seaborn style designation</p></li>
+<li><p><strong>font_scale</strong> (<em>float</em>) – Scaling factor for font size</p></li>
+<li><p><strong>figsize</strong> (<em>Tuple</em><em>[</em><em>int</em><em>]</em>) – Tuple of figure size (x, y)</p></li>
+<li><p><strong>data_color</strong> (<em>str</em>) – Color of data line</p></li>
+<li><p><strong>lognorm_color</strong> (<em>str</em>) – Color of data line</p></li>
+</ul>
+</dd>
+</dl>
+<p>:param title                    Plot title.  If None, then no title will be displayed.
+:type title                     Union[str, None]</p>
+<p>:param title                    Plot title.  If None, then no title will be displayed.
+:type title                     Union[str, None]</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="atiim.plots.plot_wse_exceedance_probability">
+<span class="sig-prename descclassname"><span class="pre">atiim.plots.</span></span><span class="sig-name descname"><span class="pre">plot_wse_exceedance_probability</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">pandas.core.frame.DataFrame</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_plot</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_plot</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">150</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">date_field_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'DATE'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_field_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'TIME'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elevation_field_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'WL_ELEV_M'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_padding</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_samples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">style</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'whitegrid'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">font_scale</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(12,</span> <span class="pre">8)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'#005AB5'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lognorm_color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'#DC3220'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'Exceedance</span> <span class="pre">Probability</span> <span class="pre">of</span> <span class="pre">Water</span> <span class="pre">Surface</span> <span class="pre">Elevation'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/atiim/plots.html#plot_wse_exceedance_probability"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atiim.plots.plot_wse_exceedance_probability" title="Permalink to this definition"></a></dt>
+<dd><p>Plot the probability of occurrence for individual water surface elevations based on the period-of-record.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><em>pd.Dataframe</em><em>]</em>) – Either a full path with file name and extension to the gage data file or
+a data frame processed using atiim.import_gage_data()</p></li>
+<li><p><strong>show_plot</strong> (<em>bool</em>) – If True, plot will be displayed</p></li>
+<li><p><strong>save_plot</strong> (<em>bool</em>) – If True, plot will be written to file and a value must be set for output_file</p></li>
+<li><p><strong>date_field_name</strong> (<em>str</em>) – Name of date field in file</p></li>
+<li><p><strong>time_field_name</strong> (<em>str</em>) – Name of time field in file</p></li>
+<li><p><strong>elevation_field_name</strong> (<em>str</em>) – Name of elevation field in file</p></li>
+<li><p><strong>x_padding</strong> (<em>float</em>) – Multiplier for maximum elevation to determine an ending interval for the x-axis.
+E.g., if max value is 100 and x_padding is 1.1 then the ending bound would be 110.</p></li>
+<li><p><strong>n_samples</strong> (<em>int</em>) – The number of samples to generate over the x-axis space</p></li>
+<li><p><strong>output_file</strong> (<em>str</em>) – Full path with file name and extension to an output file</p></li>
+<li><p><strong>dpi</strong> (<em>int</em>) – The resolution in dots per inch</p></li>
+<li><p><strong>style</strong> (<em>str</em>) – Seaborn style designation</p></li>
+<li><p><strong>font_scale</strong> (<em>float</em>) – Scaling factor for font size</p></li>
+<li><p><strong>figsize</strong> (<em>Tuple</em><em>[</em><em>int</em><em>]</em>) – Tuple of figure size (x, y)</p></li>
+<li><p><strong>data_color</strong> (<em>str</em>) – Color of data line</p></li>
+<li><p><strong>lognorm_color</strong> (<em>str</em>) – Color of data line</p></li>
+</ul>
+</dd>
+</dl>
+<p>:param transparency             Alpha value from 0 to 1 for transparency of histogram
+:type transparency              float</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>n_bins</strong> (<em>int</em>) – The number of equal-width bins in the range.</p>
+</dd>
+</dl>
+<p>:param title                    Plot title.  If None, then no title will be displayed.
+:type title                     Union[str, None]</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="atiim.plots.plot_wse_probability_density">
+<span class="sig-prename descclassname"><span class="pre">atiim.plots.</span></span><span class="sig-name descname"><span class="pre">plot_wse_probability_density</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">pandas.core.frame.DataFrame</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_plot</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_plot</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">150</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">date_field_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'DATE'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_field_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'TIME'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elevation_field_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'WL_ELEV_M'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_padding</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_samples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">style</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'whitegrid'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">font_scale</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(12,</span> <span class="pre">8)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'#005AB5'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lognorm_color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'#DC3220'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transparency</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_bins</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">21</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'Probability</span> <span class="pre">Density</span> <span class="pre">of</span> <span class="pre">Water</span> <span class="pre">Surface</span> <span class="pre">Elevation'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/atiim/plots.html#plot_wse_probability_density"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atiim.plots.plot_wse_probability_density" title="Permalink to this definition"></a></dt>
+<dd><p>Plot the probability density of water surface elevations based on the period-of-record.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><em>pd.Dataframe</em><em>]</em>) – Either a full path with file name and extension to the gage data file or
+a data frame processed using atiim.import_gage_data()</p></li>
+<li><p><strong>show_plot</strong> (<em>bool</em>) – If True, plot will be displayed</p></li>
+<li><p><strong>save_plot</strong> (<em>bool</em>) – If True, plot will be written to file and a value must be set for output_file</p></li>
+<li><p><strong>date_field_name</strong> (<em>str</em>) – Name of date field in file</p></li>
+<li><p><strong>time_field_name</strong> (<em>str</em>) – Name of time field in file</p></li>
+<li><p><strong>elevation_field_name</strong> (<em>str</em>) – Name of elevation field in file</p></li>
+<li><p><strong>x_padding</strong> (<em>float</em>) – Multiplier for maximum elevation to determine an ending interval for the x-axis.
+E.g., if max value is 100 and x_padding is 1.1 then the ending bound would be 110.</p></li>
+<li><p><strong>n_samples</strong> (<em>int</em>) – The number of samples to generate over the x-axis space</p></li>
+<li><p><strong>output_file</strong> (<em>str</em>) – Full path with file name and extension to an output file</p></li>
+<li><p><strong>dpi</strong> (<em>int</em>) – The resolution in dots per inch</p></li>
+<li><p><strong>style</strong> (<em>str</em>) – Seaborn style designation</p></li>
+<li><p><strong>font_scale</strong> (<em>float</em>) – Scaling factor for font size</p></li>
+<li><p><strong>figsize</strong> (<em>Tuple</em><em>[</em><em>int</em><em>]</em>) – Tuple of figure size (x, y)</p></li>
+<li><p><strong>data_color</strong> (<em>str</em>) – Color of data line</p></li>
+<li><p><strong>lognorm_color</strong> (<em>str</em>) – Color of data line</p></li>
+</ul>
+</dd>
+</dl>
+<p>:param transparency             Alpha value from 0 to 1 for transparency of histogram
+:type transparency              float</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>n_bins</strong> (<em>int</em>) – The number of equal-width bins in the range.</p>
+</dd>
+</dl>
+<p>:param title                    Plot title.  If None, then no title will be displayed.
+:type title                     Union[str, None]</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="atiim.plots.plot_wse_timeseries">
+<span class="sig-prename descclassname"><span class="pre">atiim.plots.</span></span><span class="sig-name descname"><span class="pre">plot_wse_timeseries</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">pandas.core.frame.DataFrame</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_plot</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_plot</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">150</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">date_field_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'DATE'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_field_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'TIME'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elevation_field_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'WL_ELEV_M'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">style</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'whitegrid'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">font_scale</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(12,</span> <span class="pre">8)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'#005AB5'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transparency</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.7</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'Water</span> <span class="pre">Surface</span> <span class="pre">Elevation</span> <span class="pre">Gage</span> <span class="pre">Measurements'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/atiim/plots.html#plot_wse_timeseries"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atiim.plots.plot_wse_timeseries" title="Permalink to this definition"></a></dt>
+<dd><p>Create plot for water surface elevation for the gage measurement period.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><em>pd.Dataframe</em><em>]</em>) – Either a full path with file name and extension to the gage data file or
+a data frame processed using atiim.import_gage_data()</p></li>
+<li><p><strong>show_plot</strong> (<em>bool</em>) – If True, plot will be displayed</p></li>
+<li><p><strong>save_plot</strong> (<em>bool</em>) – If True, plot will be written to file and a value must be set for output_file</p></li>
+<li><p><strong>output_file</strong> (<em>str</em>) – Full path with file name and extension to an output file</p></li>
+<li><p><strong>dpi</strong> (<em>int</em>) – The resolution in dots per inch</p></li>
+<li><p><strong>date_field_name</strong> (<em>str</em>) – Name of date field in file</p></li>
+<li><p><strong>time_field_name</strong> (<em>str</em>) – Name of time field in file</p></li>
+<li><p><strong>elevation_field_name</strong> (<em>str</em>) – Name of elevation field in file</p></li>
+<li><p><strong>style</strong> (<em>str</em>) – Seaborn style designation</p></li>
+<li><p><strong>font_scale</strong> (<em>float</em>) – Scaling factor for font size</p></li>
+<li><p><strong>figsize</strong> (<em>Tuple</em><em>[</em><em>int</em><em>]</em>) – Tuple of figure size (x, y)</p></li>
+<li><p><strong>color</strong> (<em>str</em>) – Color of line and markers in plot</p></li>
+</ul>
+</dd>
+</dl>
+<p>:param transparency             Alpha value from 0 to 1 for transparency
+:type transparency              float</p>
+<p>:param title                    Plot title.  If None, then no title will be displayed.
+:type title                     Union[str, None]</p>
+</dd></dl>
+
+</section>
+<section id="module-atiim">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-atiim" title="Permalink to this headline"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="API documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Battelle Memorial Institute.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

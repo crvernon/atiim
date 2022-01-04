@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>atiim.inundation &mdash; atiim 1.0.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/atiim.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/getting_started.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> atiim
+          </a>
+              <div class="version">
+                1.0.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">API documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">atiim</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      <li>atiim.inundation</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for atiim.inundation</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">rasterio</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<span class="kn">import</span> <span class="nn">rasterio.mask</span>
+<span class="kn">import</span> <span class="nn">shapely.speedups</span>
+<span class="kn">from</span> <span class="nn">rasterio.crs</span> <span class="kn">import</span> <span class="n">CRS</span>
+<span class="kn">from</span> <span class="nn">rasterio.features</span> <span class="kn">import</span> <span class="n">shapes</span>
+<span class="kn">from</span> <span class="nn">rasterio.transform</span> <span class="kn">import</span> <span class="n">Affine</span>
+<span class="kn">from</span> <span class="nn">joblib</span> <span class="kn">import</span> <span class="n">delayed</span><span class="p">,</span> <span class="n">Parallel</span>
+
+<span class="kn">from</span> <span class="nn">.gage</span> <span class="kn">import</span> <span class="n">process_gage_data</span>
+<span class="kn">from</span> <span class="nn">.dem</span> <span class="kn">import</span> <span class="n">create_basin_dem</span>
+
+<span class="c1"># enable shapely speedups for topology operations</span>
+<span class="n">shapely</span><span class="o">.</span><span class="n">speedups</span><span class="o">.</span><span class="n">enable</span><span class="p">()</span>
+
+
+<span class="c1"># TODO:  remove ignore warning generated for a future shapely depreciation in rasterio.features.shapes</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="process_slice"><a class="viewcode-back" href="../../atiim.html#atiim.inundation.process_slice">[docs]</a><span class="k">def</span> <span class="nf">process_slice</span><span class="p">(</span><span class="n">arr</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+                  <span class="n">upper_elev</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                  <span class="n">gage_gdf</span><span class="p">:</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span>
+                  <span class="n">water_elev_freq</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+                  <span class="n">run_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                  <span class="n">hour_interval</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                  <span class="n">transform</span><span class="p">:</span> <span class="n">Affine</span><span class="p">,</span>
+                  <span class="n">target_crs</span><span class="p">:</span> <span class="n">CRS</span><span class="p">,</span>
+                  <span class="n">write_shapefile</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                  <span class="n">output_directory</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Create a water level polygon shapefile containing a single feature that represents</span>
+<span class="sd">    the grid cells of an input DEM that are less than or equal to an upper elevation level.</span>
+
+<span class="sd">    :param arr:                     2D array from raster band read</span>
+<span class="sd">    :type arr:                      np.ndarray</span>
+
+<span class="sd">    :param upper_elev:              Elevation value for the upper bound of the elevation interval</span>
+<span class="sd">    :type upper_elev:               float</span>
+
+<span class="sd">    :param gage_gdf:                GeoDataFrame of the gage location point</span>
+<span class="sd">    :type gage_gdf:                 gpd.GeoDataFrame</span>
+
+<span class="sd">    :param water_elev_freq:         Dictionary of water elevation frequency {elev:  frequency}</span>
+<span class="sd">    :type water_elev_freq:          dict</span>
+
+<span class="sd">    :param run_name:                Name of run, all lowercase and only underscore separated.</span>
+<span class="sd">    :type run_name:                 str</span>
+
+<span class="sd">    :param hour_interval:           Time step of inundation extent.  Either 1.0 or 0.5.</span>
+<span class="sd">    :type hour_interval:            float</span>
+
+<span class="sd">    :param transform:               Trasformation object from the rasterio source raster</span>
+<span class="sd">    :type transform:                Affine</span>
+
+<span class="sd">    :param target_crs:              Coordinate reference system (CRS) object from the rasterio source raster to</span>
+<span class="sd">                                    be used in projecting the water level polygons.</span>
+<span class="sd">    :type target_crs:               CRS</span>
+
+<span class="sd">    :param write_shapefile:         Optional.  Choice to write the GeoDataFrame water level polygon as a shapefile.</span>
+<span class="sd">                                    Set output directory if True.  Default is True.</span>
+
+<span class="sd">    :type write_shapefile:          bool</span>
+
+<span class="sd">    :param output_directory:        Full path to a write-enabled directory to write output files to if write_shapefile</span>
+<span class="sd">                                    is set to True</span>
+<span class="sd">    :type output_directory:         str</span>
+
+<span class="sd">    :return:                        A geopandas data frame of a polygon intersecting the gage point location for</span>
+<span class="sd">                                    the target elevation interval.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># TODO:  account for different units</span>
+    <span class="k">if</span> <span class="n">hour_interval</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">):</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;The hour interval of &#39;</span><span class="si">{</span><span class="n">hour_interval</span><span class="si">}</span><span class="s2">&#39; is not currently supported.  Please use either 1.0 or 0.5 (half hour).&quot;</span>
+        <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="c1"># generate a feature id from the elevation value</span>
+    <span class="n">feature_id</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">upper_elev</span> <span class="o">*</span> <span class="mi">100</span><span class="p">)</span>
+
+    <span class="c1"># create every value greater than or equal to the upper elevation to 1, others to 0</span>
+    <span class="n">arx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">arr</span> <span class="o">&lt;=</span> <span class="n">upper_elev</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int16</span><span class="p">)</span>
+
+    <span class="c1"># build each feature based on the extracted grid cells from the array</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+        <span class="p">{</span><span class="s1">&#39;properties&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;raster_val&#39;</span><span class="p">:</span> <span class="n">val</span><span class="p">},</span> <span class="s1">&#39;geometry&#39;</span><span class="p">:</span> <span class="n">shp</span><span class="p">}</span>
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="p">(</span><span class="n">shp</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span>
+            <span class="n">shapes</span><span class="p">(</span><span class="n">arx</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">transform</span><span class="p">))</span>
+    <span class="p">)</span>
+
+    <span class="c1"># list of geometries</span>
+    <span class="n">geoms</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+
+    <span class="c1"># build geopandas dataframe from geometries</span>
+    <span class="n">gdf</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="o">.</span><span class="n">from_features</span><span class="p">(</span><span class="n">geoms</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="n">target_crs</span><span class="p">)</span>
+
+    <span class="c1"># only keep the ones</span>
+    <span class="n">gdf</span> <span class="o">=</span> <span class="n">gdf</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">gdf</span><span class="p">[</span><span class="s1">&#39;raster_val&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span>
+
+    <span class="c1"># only keep the polygon intersecting the gage</span>
+    <span class="n">gdf</span><span class="p">[</span><span class="s1">&#39;valid&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gdf</span><span class="o">.</span><span class="n">intersects</span><span class="p">(</span><span class="n">gage_gdf</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">gdf</span> <span class="o">=</span> <span class="n">gdf</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">gdf</span><span class="p">[</span><span class="s1">&#39;valid&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="c1"># ensure at least one polygon intersects the gage</span>
+    <span class="k">if</span> <span class="n">gdf</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Gage location point not aligned with valid elevation in DEM.  Relocate gage location point to fall within valid elevation.&quot;</span>
+        <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="c1"># dissolve into a single polygon</span>
+    <span class="n">gdf</span> <span class="o">=</span> <span class="n">gdf</span><span class="o">.</span><span class="n">dissolve</span><span class="p">(</span><span class="s1">&#39;raster_val&#39;</span><span class="p">)</span>
+    <span class="n">gdf</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># add fields</span>
+    <span class="n">gdf</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">feature_id</span>
+    <span class="n">gdf</span><span class="p">[</span><span class="s1">&#39;frequency&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">water_elev_freq</span><span class="p">[</span><span class="nb">round</span><span class="p">(</span><span class="n">upper_elev</span><span class="p">,</span> <span class="mi">1</span><span class="p">)]</span>
+    <span class="n">gdf</span><span class="p">[</span><span class="s1">&#39;elevation&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">upper_elev</span>
+    <span class="n">gdf</span><span class="p">[</span><span class="s1">&#39;area&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gdf</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">area</span>
+    <span class="n">gdf</span><span class="p">[</span><span class="s1">&#39;hectares&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gdf</span><span class="p">[</span><span class="s1">&#39;area&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mf">0.0001</span>
+    <span class="n">gdf</span><span class="p">[</span><span class="s1">&#39;perimeter&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gdf</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">length</span>
+    <span class="n">gdf</span><span class="p">[</span><span class="s1">&#39;hect_hours&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">gdf</span><span class="p">[</span><span class="s1">&#39;frequency&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">hour_interval</span><span class="p">)</span> <span class="o">*</span> <span class="n">gdf</span><span class="p">[</span><span class="s1">&#39;hectares&#39;</span><span class="p">]</span>
+    <span class="n">gdf</span><span class="p">[</span><span class="s1">&#39;run_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">run_name</span>
+
+    <span class="c1"># drop unneeded fields</span>
+    <span class="n">gdf</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;raster_val&#39;</span><span class="p">,</span> <span class="s1">&#39;valid&#39;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># write to file if desired</span>
+    <span class="k">if</span> <span class="n">write_shapefile</span><span class="p">:</span>
+
+        <span class="k">if</span> <span class="n">output_directory</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Please pass a value for output_directory if choosing to write shapefile outputs.&#39;</span>
+            <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="n">out_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_directory</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;wl_</span><span class="si">{</span><span class="n">feature_id</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">run_name</span><span class="si">}</span><span class="s1">.shp&#39;</span><span class="p">)</span>
+        <span class="n">gdf</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">out_file</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">gdf</span></div>
+
+
+<div class="viewcode-block" id="simulate_inundation"><a class="viewcode-back" href="../../atiim.html#atiim.inundation.simulate_inundation">[docs]</a><span class="k">def</span> <span class="nf">simulate_inundation</span><span class="p">(</span><span class="n">dem_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                        <span class="n">basin_shp</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                        <span class="n">gage_shp</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                        <span class="n">gage_data_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                        <span class="n">output_directory</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                        <span class="n">run_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                        <span class="n">write_csv</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                        <span class="n">elevation_interval</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span>
+                        <span class="n">hour_interval</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+                        <span class="n">n_jobs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+                        <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Worker function to simulate inundation over a DEM using a stable gage location and accompanying water level</span>
+<span class="sd">    time series data.</span>
+
+<span class="sd">    :param dem_file:                Full path with file name and extension to the input DEM raster file.</span>
+<span class="sd">    :type dem_file:                 str</span>
+
+<span class="sd">    :param basin_shp:               Full path with file name and extension to the target basin shapefile</span>
+<span class="sd">    :type basin_shp:                str</span>
+
+<span class="sd">    :param gage_shp:                Full path with file name and extension to the target gage shapefile</span>
+<span class="sd">    :type gage_shp:                 str</span>
+
+<span class="sd">    :param gage_data_file:          Full path with file name and extension to the gage data file.</span>
+<span class="sd">    :type gage_data_file:           str</span>
+
+<span class="sd">    :param output_directory:        Full path to a write-enabled directory to write output files to</span>
+<span class="sd">    :type output_directory:         str</span>
+
+<span class="sd">    :param run_name:                Name of run, all lowercase and only underscore separated.</span>
+<span class="sd">    :type run_name:                 str</span>
+
+<span class="sd">    :param write_csv:               Choice to write a CSV file of inundation metric outputs</span>
+<span class="sd">    :type write_csv:                bool</span>
+
+<span class="sd">    :param elevation_interval:      Step for elevation to be processed.</span>
+<span class="sd">    :type elevation_interval:       float</span>
+
+<span class="sd">    :param hour_interval:           Time step of inundation extent.  Either 1.0 or 0.5.</span>
+<span class="sd">    :type hour_interval:            float</span>
+
+<span class="sd">    :param n_jobs:                  The maximum number of concurrently running jobs, such as the number of Python</span>
+<span class="sd">                                    worker processes when backend=”multiprocessing” or the size of the thread-pool</span>
+<span class="sd">                                    when backend=”threading”. If -1 all CPUs are used. If 1 is given, no parallel</span>
+<span class="sd">                                    computing code is used at all, which is useful for debugging. For n_jobs</span>
+<span class="sd">                                    below -1, (n_cpus + 1 + n_jobs) are used. Thus for n_jobs = -2, all</span>
+<span class="sd">                                    CPUs but one are used. None is a marker for ‘unset’ that will be interpreted</span>
+<span class="sd">                                    as n_jobs=1 (sequential execution) unless the call is performed under</span>
+<span class="sd">                                    a parallel_backend context manager that sets another value for n_jobs.</span>
+<span class="sd">    :type n_jobs:                   int</span>
+
+<span class="sd">    :param verbose:                 Choice to log verbosely</span>
+<span class="sd">    :type verbose:                  bool</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># process gage data file</span>
+    <span class="n">min_gage_elev</span><span class="p">,</span> <span class="n">max_gage_elev</span><span class="p">,</span> <span class="n">water_elev_freq</span> <span class="o">=</span> <span class="n">process_gage_data</span><span class="p">(</span><span class="n">gage_data_file</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
+
+    <span class="c1"># read in gage shapefile to a geodataframe</span>
+    <span class="n">gage_gdf</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">gage_shp</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">Env</span><span class="p">():</span>
+
+        <span class="c1"># clip the input DEM to a target basin contributing area</span>
+        <span class="n">masked_dem_file</span> <span class="o">=</span> <span class="n">create_basin_dem</span><span class="p">(</span><span class="n">basin_shp</span><span class="p">,</span> <span class="n">dem_file</span><span class="p">,</span> <span class="n">output_directory</span><span class="p">,</span> <span class="n">run_name</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">masked_dem_file</span><span class="p">)</span> <span class="k">as</span> <span class="n">src</span><span class="p">:</span>
+            <span class="c1"># read the raster band into a number array</span>
+            <span class="n">arr</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+            <span class="c1"># convert the raster nodata value to numpy nan</span>
+            <span class="n">arr</span><span class="p">[</span><span class="n">arr</span> <span class="o">==</span> <span class="n">src</span><span class="o">.</span><span class="n">nodata</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+            <span class="n">raster_min</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="n">arr</span><span class="p">))</span>
+            <span class="n">raster_max</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="n">arr</span><span class="p">))</span>
+
+            <span class="c1"># use the minimum bounding elevation e.g., the max of min available</span>
+            <span class="n">elev_min</span> <span class="o">=</span> <span class="nb">max</span><span class="p">([</span><span class="n">min_gage_elev</span><span class="p">,</span> <span class="n">raster_min</span><span class="p">])</span>
+
+            <span class="c1"># use the maximum bounding elevation e.g., the min of max available</span>
+            <span class="n">elev_max</span> <span class="o">=</span> <span class="nb">min</span><span class="p">([</span><span class="n">max_gage_elev</span><span class="p">,</span> <span class="n">raster_max</span><span class="p">])</span>
+
+            <span class="c1"># construct elevation upper bounds to process for each slice</span>
+            <span class="n">elev_slices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">elev_min</span><span class="p">,</span> <span class="n">elev_max</span> <span class="o">+</span> <span class="n">elevation_interval</span><span class="p">,</span> <span class="n">elevation_interval</span><span class="p">)</span>
+
+            <span class="c1"># process all elevation slices in parallel</span>
+            <span class="n">feature_list</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="n">n_jobs</span><span class="p">)(</span>
+                <span class="n">delayed</span><span class="p">(</span><span class="n">process_slice</span><span class="p">)(</span><span class="n">arr</span><span class="o">=</span><span class="n">arr</span><span class="p">,</span>
+                                       <span class="n">upper_elev</span><span class="o">=</span><span class="n">upper_elev</span><span class="p">,</span>
+                                       <span class="n">output_directory</span><span class="o">=</span><span class="n">output_directory</span><span class="p">,</span>
+                                       <span class="n">gage_gdf</span><span class="o">=</span><span class="n">gage_gdf</span><span class="p">,</span>
+                                       <span class="n">water_elev_freq</span><span class="o">=</span><span class="n">water_elev_freq</span><span class="p">,</span>
+                                       <span class="n">run_name</span><span class="o">=</span><span class="n">run_name</span><span class="p">,</span>
+                                       <span class="n">hour_interval</span><span class="o">=</span><span class="n">hour_interval</span><span class="p">,</span>
+                                       <span class="n">transform</span><span class="o">=</span><span class="n">src</span><span class="o">.</span><span class="n">transform</span><span class="p">,</span>
+                                       <span class="n">target_crs</span><span class="o">=</span><span class="n">src</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">upper_elev</span> <span class="ow">in</span> <span class="n">elev_slices</span><span class="p">)</span>
+
+            <span class="c1"># concatenate individual GeoDataFrames into a single frame</span>
+            <span class="n">result_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">feature_list</span><span class="p">)</span>
+
+            <span class="c1"># drop geometry</span>
+            <span class="n">result_df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;geometry&#39;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+            <span class="c1"># write data frame to file removing geometry if so desired</span>
+            <span class="k">if</span> <span class="n">write_csv</span><span class="p">:</span>
+                <span class="n">out_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_directory</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;inundation_metrics_</span><span class="si">{</span><span class="n">run_name</span><span class="si">}</span><span class="s1">.csv&#39;</span><span class="p">)</span>
+                <span class="n">result_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">out_file</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Minimum DEM Elevation:  </span><span class="si">{</span><span class="nb">round</span><span class="p">(</span><span class="n">raster_min</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Maximum DEM Elevation:  </span><span class="si">{</span><span class="nb">round</span><span class="p">(</span><span class="n">raster_max</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Bounded DEM Elevation:  </span><span class="si">{</span><span class="nb">round</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">elev_slices</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Bounded DEM Elevation:  </span><span class="si">{</span><span class="nb">round</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">elev_slices</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">result_df</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Battelle Memorial Institute.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

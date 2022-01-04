@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Getting started &mdash; atiim 1.0.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" type="text/css" />
+      <link rel="stylesheet" href="_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" type="text/css" />
+      <link rel="stylesheet" href="_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/atiim.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/getting_started.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> atiim
+          </a>
+              <div class="version">
+                1.0.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">API documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">atiim</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Getting started</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/getting_started.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="getting-started">
+<h1>Getting started<a class="headerlink" href="#getting-started" title="Permalink to this headline"></a></h1>
+<section id="about">
+<h2>About<a class="headerlink" href="#about" title="Permalink to this headline"></a></h2>
+<p>The hydrodynamics of floodplain and/or tidal-fluvial systems directly impact habitat quality and opportunity. Inundation patterns can be influenced by tidal cycles, hydro system operations, meteorology and climate, and physical barriers such as dikes and tide gates. These patterns are controlling factors in the development of physical and biological structure, including fluxes through the terrestrial and aquatic systems. Ongoing wetland/riparian restoration efforts are intended to increase available habitat opportunity through hydrologic reconnection between main stem river channels and diked areas of the historical river floodplain. The habitat opportunity can be evaluated by quantifying wetted area, frequency, and duration of inundation.</p>
+<p>To address the challenge of rapidly characterizing spatiotemporally-complex inundation patterns in dynamic systems, such as estuarine tidal-fluvial environments, the Pacific Northwest National Laboratory (PNNL) developed the Area-Time Inundation Index Model (ATIIM). Originally developed as part of the U.S. Army Corps of Engineers (Portland District) sponsored “Cumulative Effects” project (EST-P-02-04), the ATIIM integrates in-situ, modeled, or scenario-based hourly water-surface elevation (WSE) data and advanced terrain processing of high-resolution terrestrial and bathymetric elevation data (Figure 1). The model establishes and describes patterns in the spatial and temporal relationships of the land and water including non-dimensional area-time and volume-time inundation indices. The ATIIM uses a spatially-based region-growing wetted-area algorithm that enforces hydrologic connectivity and determines numerous metrics such as site average bankfull elevation, two- and three-dimensional inundation extent/volume, and habitat opportunity. Importantly, it is well suited to represent numerous types of channel network morphologies that represent multiple inlets and outlets, flow-through, and multi-directional flow, while preserving the landscape microtopography, a critical factor in low-lying estuarine environments. The development of microtopographic terrain model is particularly useful in low elevation range estuarine environments and can be used to extract a fine level of detail in the inundation patterns and also reveal high resolution and complex channel hydrography. Hydrological process metrics such as inundation frequency, duration, maximum area, and maximum frequency area are also calculated and can inform evaluation of proposed restoration sites; e.g., determine relationships between WSE and habitat opportunity, contrast alternative restoration designs, terrain modifications, predict impacts of altered flow regimes including sea-level rise and/or extreme event scenarios, and estimate nutrient and biomass fluxes. In an adaptive management framework, this model can be used to provide standardized site comparisons and effectiveness monitoring indicators of changes in the developmental trajectories of restoration sites. In an adaptive management framework, this model can be used to provide standardized site comparisons and effectiveness monitoring of changes in the developmental trajectories of restoration sites.</p>
+<p>The original version of ATIIM was developed with ESRI’s Arc Macro Language (AML) based on Arc/INFO v.8.x Under this recent effort, the ATIIM code was ported to Python and currently operates via the common and familiar ArcGIS software suite through ArcMap. The majority of ported model functions are now self-reliant within ATIIM or call outside open-source codes and don’t rely heavily on embedded functions within ArcGIS. As such, there are several other software packages required for ATIIM to function and these are bundled within the install. A development goal for ATIIM was to allow use of the model using a basic license version of ArcGIS and therefore not require users to have expensive extensions to license. This goal also enables an eventual goal to allow ATIIM to be supported within other GIS softwares, including open-source QGIS. This goal is not fully realized at this version, as there are still functions that rely on the Spatial Analyst license, but continued development will achieve the intended goal. One of the main objectives in the development of ATIIM has been to provide a cost-effective, easy-to-use, rapid assessment tool suitable for the desktop planning environment that represents an advance over methods that estimate inundation but do not enforce hydrological connectivity.</p>
+<p>The ATIIM outputs a wide suite of metrics over a spatial and temporal continuum, taking the form of spatial data, tables, metrics, and plots. The modeling captures continuous spatial and temporal effects at user-defined time-steps (typically hourly increments) over the study period, thus snapshots of inundation conditions are available for any particular time of interest. A series of metrics are produced and can be used for a variety of situations to best characterize inundation events as they affect habitat quality and availability for local species. The development of ATIIM has relied on, and has been guided by, feedback from practitioners and their respective needs. New metrics, data processing steps, and data sets can be added based on your feedback.
+There are three classes of data output produced by ATIIM: 1) spatial data including raster and vector representations of the site under different flow states and restoration designs (Figure 2); 2) tabular data providing site characteristics and metrics; and 3) graph data derived from the analysis and post-processing of the spatial data (Figure 3).</p>
+</section>
+<section id="python-version-support">
+<h2>Python version support<a class="headerlink" href="#python-version-support" title="Permalink to this headline"></a></h2>
+<p>Officially Python 3.7, 3.8, and 3.9</p>
+</section>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline"></a></h2>
+<p><strong>atiim</strong> can be installed via pip by running the following from a terminal window:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">atiim</span>
+</pre></div>
+</div>
+<p>Conda/Miniconda users can utilize the <code class="docutils literal notranslate"><span class="pre">environment.yml</span></code> stored in the root of this repository by executing the following from a terminal window:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">env</span> <span class="n">create</span> <span class="o">--</span><span class="n">file</span> <span class="n">environment</span><span class="o">.</span><span class="n">yml</span>
+</pre></div>
+</div>
+<p>It may be favorable to the user to create a virtual environment for the <strong>atiim</strong> package to minimize package version conflicts.  See <a class="reference external" href="https://docs.python.org/3/library/venv.html">creating virtual environments</a> to learn how these function and can be setup.</p>
+</section>
+<section id="installing-package-data">
+<h2>Installing package data<a class="headerlink" href="#installing-package-data" title="Permalink to this headline"></a></h2>
+<p><strong>atiim</strong> requires package data to be installed from Zenodo to keep the package lightweight.  After <strong>atiim</strong> has been installed, run the following from a Python prompt:</p>
+<p><strong>NOTE</strong>:  The package data will require approximately 195 MB of storage.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">atiim</span>
+
+<span class="n">atiim</span><span class="o">.</span><span class="n">install_package_data</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>This will automatically download and install the package data necessary to run the examples in accordance with the version of <strong>atiim</strong> you are running.  You can pass an alternative directory to install the data into (default is to install it in the package data directory) using <code class="docutils literal notranslate"><span class="pre">data_dir</span></code>.  When doing so, you must modify the configuration file to point to your custom paths.</p>
+</section>
+<section id="dependencies">
+<h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline"></a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 45%" />
+<col style="width: 55%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Dependency</p></th>
+<th class="head"><p>Minimum Version</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>numpy</p></td>
+<td><p>1.19.4</p></td>
+</tr>
+<tr class="row-odd"><td><p>pandas</p></td>
+<td><p>1.1.4</p></td>
+</tr>
+<tr class="row-even"><td><p>rasterio</p></td>
+<td><p>1.2.3</p></td>
+</tr>
+<tr class="row-odd"><td><p>requests</p></td>
+<td><p>2.25.1</p></td>
+</tr>
+<tr class="row-even"><td><p>joblib</p></td>
+<td><p>1.0.1</p></td>
+</tr>
+<tr class="row-odd"><td><p>matplotlib</p></td>
+<td><p>3.3.3</p></td>
+</tr>
+<tr class="row-even"><td><p>seaborn</p></td>
+<td><p>0.11.1</p></td>
+</tr>
+<tr class="row-odd"><td><p>whitebox</p></td>
+<td><p>1.5.1</p></td>
+</tr>
+<tr class="row-even"><td><p>fiona</p></td>
+<td><p>1.8.19</p></td>
+</tr>
+<tr class="row-odd"><td><p>pyproj</p></td>
+<td><p>3.0.1</p></td>
+</tr>
+<tr class="row-even"><td><p>rtree</p></td>
+<td><p>0.9.7</p></td>
+</tr>
+<tr class="row-odd"><td><p>shapely</p></td>
+<td><p>1.7.1</p></td>
+</tr>
+<tr class="row-even"><td><p>geopandas</p></td>
+<td><p>0.9.0</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="optional-dependencies">
+<h2>Optional dependencies<a class="headerlink" href="#optional-dependencies" title="Permalink to this headline"></a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 53%" />
+<col style="width: 47%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Dependency</p></th>
+<th class="head"><p>Minimum Version</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>build</p></td>
+<td><p>0.5.1</p></td>
+</tr>
+<tr class="row-odd"><td><p>nbsphinx</p></td>
+<td><p>0.8.6</p></td>
+</tr>
+<tr class="row-even"><td><p>setuptools</p></td>
+<td><p>57.0.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>sphinx</p></td>
+<td><p>4.0.2</p></td>
+</tr>
+<tr class="row-even"><td><p>sphinx-panels</p></td>
+<td><p>0.6.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>sphinx-rtd-theme</p></td>
+<td><p>0.5.2</p></td>
+</tr>
+<tr class="row-even"><td><p>twine</p></td>
+<td><p>3.4.1</p></td>
+</tr>
+<tr class="row-odd"><td><p>pytest</p></td>
+<td><p>6.2.4</p></td>
+</tr>
+<tr class="row-even"><td><p>pytest-cov</p></td>
+<td><p>2.12.1</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Battelle Memorial Institute.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
