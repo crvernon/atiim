@@ -24,12 +24,12 @@ atiim documentation
 
 
    ---
-   :img-top: _static/index_getting_started.svg
+   :img-top: _static/cognitive.svg
 
    Getting Started
    ^^^^^^^^^^^^^^^
 
-   New to **atiim**?  Get familiar with what **atiim** is all about.
+   Get to know **atiim**.
 
    +++
 
@@ -39,13 +39,12 @@ atiim documentation
            :classes: btn-block btn-secondary stretched-link
 
    ---
-   :img-top: _static/index_user_guide.svg
+   :img-top: _static/education.svg
 
    User Guide
    ^^^^^^^^^^
 
-   The user guide provides in-depth information on the
-   key concepts of **atiim**.
+   The user guide provides in-depth information on the key concepts of **atiim**.
 
    +++
 
@@ -55,14 +54,12 @@ atiim documentation
            :classes: btn-block btn-secondary stretched-link
 
    ---
-   :img-top: _static/index_api.svg
+   :img-top: _static/api.svg
 
    API Reference
    ^^^^^^^^^^^^^
 
-   The reference guide contains a detailed description of
-   the **atiim** API. The reference describes how the methods
-   work and which parameters can be used.
+   A detailed description of the **atiim** API.
 
    +++
 
@@ -77,9 +74,7 @@ atiim documentation
    Contributing to atiim
    ^^^^^^^^^^^^^^^^^^^^
 
-   Saw a typo in the documentation? Want to improve
-   existing functionalities? The contributing guidelines will guide
-   you through the process of improving **atiim**.
+   Report a bug or suggest a new feature.
 
    +++
 
