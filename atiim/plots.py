@@ -11,6 +11,7 @@ from matplotlib.ticker import ScalarFormatter, FormatStrFormatter, FixedLocator
 
 from .gage import import_gage_data
 from .inflection import calculate_bankfull_elevation
+from .hypsometric import hypsometric_curve
 
 
 class PlotGeneral:
@@ -330,6 +331,91 @@ class PlotInundationData(PlotGeneral):
             return pd.read_csv(self.data)
 
 
+class PlotDem(PlotGeneral):
+    """Prepare elevation data from an input DEM raster for plotting.
+
+    :param data:                    Either a full path with file name and extension to the input DEM raster or
+                                    a data frame processed using atiim.hypsometric_curve()
+    :type data:                     Union[str, pd.Dataframe]
+
+    :param elevation_interval:      Optional. Elevation sample spacing in the units of the input DEM. Set when using a
+                                    DEM raster file input.
+    :type elevation_interval:       float
+
+    :param min_elevation:           Optional.  Minimum elevation to sample from.  Default is to use the minimum
+                                    elevation of the raster as a starting point. Set when using a DEM raster file input.
+    :type min_elevation:            float
+
+    :param max_elevation:           Optional.  Maximum elevation to sample from.  Default is to use the maximum
+                                    elevation of the raster as a starting point. Set when using a DEM raster file input.
+    :type max_elevation:            float
+
+    :param style:                   Seaborn style designation
+    :type style:                    str
+
+    :param font_scale:              Scaling factor for font size
+    :type font_scale:               float
+
+    :param figsize:                 Tuple of figure size (x, y)
+    :type figsize:                  Tuple[int]
+
+    :param show_plot:               If True, plot will be displayed
+    :type show_plot:                bool
+
+    :param save_plot:               If True, plot will be written to file and a value must be set for output_file
+    :type save_plot:                bool
+
+    :param output_file:             Full path with file name and extension to an output file
+    :type output_file:              str
+
+    :param dpi:                     The resolution in dots per inch
+    :type dpi:                      int
+
+    """
+
+    def __init__(self,
+                 data: Union[str, pd.DataFrame],
+                 elevation_interval: float,
+                 min_elevation: Union[float, None] = None,
+                 max_elevation: Union[float, None] = None,
+                 style: str = 'whitegrid',
+                 font_scale: float = 1.2,
+                 figsize: Tuple[int] = (12, 8),
+                 show_plot: bool = True,
+                 save_plot: bool = False,
+                 output_file: Union[str, None] = None,
+                 dpi: int = 150):
+
+        # initialize parent class
+        super().__init__(style=style,
+                         font_scale=font_scale,
+                         figsize=figsize,
+                         show_plot=show_plot,
+                         save_plot=save_plot,
+                         output_file=output_file,
+                         dpi=dpi)
+
+        self.data = data
+        self.elevation_interval = elevation_interval
+        self.min_elevation = min_elevation
+        self.max_elevation = max_elevation
+
+        # read data in as data frame
+        self.df = self.prepare_data()
+
+    def prepare_data(self) -> pd.DataFrame:
+        """Assign input data to a data frame."""
+
+        if type(self.data) == pd.DataFrame:
+            return self.data
+
+        else:
+            return hypsometric_curve(dem_file=self.data,
+                                     elevation_interval=self.elevation_interval,
+                                     min_elevation=self.min_elevation,
+                                     max_elevation=self.max_elevation)
+
+
 def plot_wse_timeseries(data: Union[str, pd.DataFrame],
                         show_plot: bool = True,
                         save_plot: bool = False,
@@ -392,7 +478,7 @@ def plot_wse_timeseries(data: Union[str, pd.DataFrame],
     """
 
     # prepare data for plotting
-    data = PlotGageData(data=data,
+    plot = PlotGageData(data=data,
                         date_field_name=date_field_name,
                         time_field_name=time_field_name,
                         elevation_field_name=elevation_field_name,
@@ -407,22 +493,21 @@ def plot_wse_timeseries(data: Union[str, pd.DataFrame],
     # construct a line plot
     sns.lineplot(x="date_time",
                  y=elevation_field_name,
-                 data=data.df,
+                 data=plot.df,
                  color=color,
-                 alpha=transparency,
-                 ax=data.ax)
+                 alpha=transparency)
 
-    data.ax.set(ylabel='Water Surface Elevation (m)',
+    plot.ax.set(ylabel='Water Surface Elevation (m)',
                 xlabel=None,
                 title=title)
 
     # set limits for the x-axis
-    plt.xlim(xmin=data.df['date_time'].min(), xmax=data.df['date_time'].max())
+    plt.xlim(xmin=plot.df['date_time'].min(), xmax=plot.df['date_time'].max())
 
     plt.xticks(rotation=45)
 
     # handle display or output options
-    data.output_handler()
+    plot.output_handler()
 
     plt.close()
 
@@ -501,7 +586,7 @@ def plot_wse_cumulative_distribution(data: Union[str, pd.DataFrame],
     """
 
     # prepare data for plotting
-    data = PlotGageData(data=data,
+    plot = PlotGageData(data=data,
                         date_field_name=date_field_name,
                         time_field_name=time_field_name,
                         elevation_field_name=elevation_field_name,
@@ -514,24 +599,24 @@ def plot_wse_cumulative_distribution(data: Union[str, pd.DataFrame],
                         dpi=dpi)
 
     # generate an evenly spaced interval of values encompassing water surface elevation for use in scaling the x-axis
-    x_data = data.generate_wse_interval(x_padding=x_padding, n_samples=n_samples)
+    x_data = plot.generate_wse_interval(x_padding=x_padding, n_samples=n_samples)
 
     # plot elevation data series steps
-    data.y_cumulative_series.plot(ax=data.ax, drawstyle='steps', label='data', color=data_color)
+    plot.y_cumulative_series.plot(ax=plot.ax, drawstyle='steps', label='data', color=data_color)
 
     # plot lognormal curve
-    data.ax.plot(x_data, data.calculate_cdf(data=x_data), label='lognormal', color=lognorm_color)
+    plot.ax.plot(x_data, plot.calculate_cdf(data=x_data), label='lognormal', color=lognorm_color)
 
-    data.ax.set_xlabel('Water Surface Elevation (m)')
-    data.ax.set_ylabel('Cumulative Distribution')
-    data.ax.legend(loc=0, framealpha=0.5)
+    plot.ax.set_xlabel('Water Surface Elevation (m)')
+    plot.ax.set_ylabel('Cumulative Distribution')
+    plot.ax.legend(loc=0, framealpha=0.5)
     plt.title(title)
 
     # set x-axis limits
-    plt.xlim(xmin=x_data.min(), xmax=data.z_max)
+    plt.xlim(xmin=x_data.min(), xmax=plot.z_max)
 
     # handle display or output options
-    data.output_handler()
+    plot.output_handler()
 
     plt.close()
 
@@ -615,7 +700,7 @@ def plot_wse_probability_density(data: Union[str, pd.DataFrame],
     """
 
     # prepare data for plotting
-    data = PlotGageData(data=data,
+    plot = PlotGageData(data=data,
                         date_field_name=date_field_name,
                         time_field_name=time_field_name,
                         elevation_field_name=elevation_field_name,
@@ -628,28 +713,28 @@ def plot_wse_probability_density(data: Union[str, pd.DataFrame],
                         dpi=dpi)
 
     # sort elevation value in ascending order
-    z_sorted = data.sorted_elevation()
+    z_sorted = plot.sorted_elevation()
 
     # generate an evenly spaced interval of values encompassing water surface elevation for use in scaling the x-axis
-    x_data = data.generate_wse_interval(x_padding=x_padding, n_samples=n_samples)
+    x_data = plot.generate_wse_interval(x_padding=x_padding, n_samples=n_samples)
 
     # plot binned elevation data
-    data.ax.hist(z_sorted, bins=n_bins, label='data', density=True, color=data_color, alpha=transparency)
+    plot.ax.hist(z_sorted, bins=n_bins, label='data', density=True, color=data_color, alpha=transparency)
 
     # plot PDF outputs
-    pdf = data.calculate_pdf(data=x_data)
-    data.ax.plot(x_data, pdf, label='lognormal', color=lognorm_color)
+    pdf = plot.calculate_pdf(data=x_data)
+    plot.ax.plot(x_data, pdf, label='lognormal', color=lognorm_color)
 
-    data.ax.set_xlabel('Water Surface Elevation (m)')
-    data.ax.set_ylabel('Probability Density')
-    data.ax.legend(loc=0, framealpha=0.5)
+    plot.ax.set_xlabel('Water Surface Elevation (m)')
+    plot.ax.set_ylabel('Probability Density')
+    plot.ax.legend(loc=0, framealpha=0.5)
     plt.title(title)
 
     # set x-axis limits
     plt.xlim(xmin=x_data.min(), xmax=x_data.max())
 
     # handle display or output options
-    data.output_handler()
+    plot.output_handler()
 
     plt.close()
 
@@ -731,7 +816,7 @@ def plot_wse_exceedance_probability(data: Union[str, pd.DataFrame],
     """
 
     # prepare data for plotting
-    data = PlotGageData(data=data,
+    plot = PlotGageData(data=data,
                         date_field_name=date_field_name,
                         time_field_name=time_field_name,
                         elevation_field_name=elevation_field_name,
@@ -744,38 +829,38 @@ def plot_wse_exceedance_probability(data: Union[str, pd.DataFrame],
                         dpi=dpi)
 
     # sort elevation value in ascending order
-    z_sorted = data.sorted_elevation()
+    z_sorted = plot.sorted_elevation()
 
     # generate an evenly spaced interval of values encompassing water surface elevation for use in scaling the x-axis
-    x_data = data.generate_wse_interval(x_padding=x_padding, n_samples=n_samples)
+    x_data = plot.generate_wse_interval(x_padding=x_padding, n_samples=n_samples)
 
     # plot exceedance probability as a percentage
-    exceedance_probability_series = data.calculate_exceedance_probability()
-    data.ax.semilogx(exceedance_probability_series, z_sorted, ls='', marker='o', label='data', color=data_color)
+    exceedance_probability_series = plot.calculate_exceedance_probability()
+    plot.ax.semilogx(exceedance_probability_series, z_sorted, ls='', marker='o', label='data', color=data_color)
 
     # plot cumulative distribution outputs
-    cumulative = 100 * (1.0 - data.calculate_cdf(data=x_data))
-    data.ax.plot(cumulative, x_data, label='lognormal', color=lognorm_color)
+    cumulative = 100 * (1.0 - plot.calculate_cdf(data=x_data))
+    plot.ax.plot(cumulative, x_data, label='lognormal', color=lognorm_color)
 
     # set interval spacing and formatting of the x-axis
     minor_locator = FixedLocator([1, 2, 5, 10, 20, 50, 100])
-    data.ax.xaxis.set_major_locator(minor_locator)
-    data.ax.xaxis.set_major_formatter(ScalarFormatter())
-    data.ax.xaxis.set_major_formatter(FormatStrFormatter("%d"))
+    plot.ax.xaxis.set_major_locator(minor_locator)
+    plot.ax.xaxis.set_major_formatter(ScalarFormatter())
+    plot.ax.xaxis.set_major_formatter(FormatStrFormatter("%d"))
 
     # set axis limits
-    data.ax.set_xlim(1, 100)
-    data.ax.set_ylim(0, data.z_max)
+    plot.ax.set_xlim(1, 100)
+    plot.ax.set_ylim(0, plot.z_max)
 
-    data.ax.set_xlabel('Exceedance Probability (%)')
-    data.ax.set_ylabel('Water Surface Elevation (m)')
-    data.ax.invert_xaxis()
-    data.ax.legend(loc=0, framealpha=0.5)
+    plot.ax.set_xlabel('Exceedance Probability (%)')
+    plot.ax.set_ylabel('Water Surface Elevation (m)')
+    plot.ax.invert_xaxis()
+    plot.ax.legend(loc=0, framealpha=0.5)
 
     plt.title(title)
 
     # handle display or output options
-    data.output_handler()
+    plot.output_handler()
 
     plt.close()
 
@@ -839,7 +924,7 @@ def plot_inundation_hectare_hours(data: Union[str, pd.DataFrame],
     """
 
     # prepare data for plotting
-    data = PlotInundationData(data=data,
+    plot = PlotInundationData(data=data,
                               style=style,
                               font_scale=font_scale,
                               figsize=figsize,
@@ -849,13 +934,13 @@ def plot_inundation_hectare_hours(data: Union[str, pd.DataFrame],
                               dpi=dpi)
 
     # pad min and max Y values for axis
-    z_max = data.elevation.max()
-    z_min = data.elevation.min()
+    z_max = plot.elevation.max()
+    z_min = plot.elevation.min()
     y_padding = z_max * y_pad_fraction
 
     # pad max x axis value
-    h_max = data.hectare_hours.max()
-    h_min = data.hectare_hours.min()
+    h_max = plot.hectare_hours.max()
+    h_min = plot.hectare_hours.min()
     x_padding = h_max * x_pad_fraction
 
     # set axis limits
@@ -865,17 +950,17 @@ def plot_inundation_hectare_hours(data: Union[str, pd.DataFrame],
     plt.xlim(xmin=h_min,
              xmax=h_max + x_padding)
 
-    plt.plot(data.hectare_hours, data.elevation, 'black')
+    plt.plot(plot.hectare_hours, plot.elevation, 'black')
 
     # fill area under the curve
-    plt.fill_betweenx(data.elevation, data.hectare_hours, color=fill_color, alpha=transparency)
+    plt.fill_betweenx(plot.elevation, plot.hectare_hours, color=fill_color, alpha=transparency)
 
     plt.title(title)
     plt.xlabel('Hectare Hours')
     plt.ylabel('Water Surface Elevation (m)')
 
     # handle display or output options
-    data.output_handler()
+    plot.output_handler()
 
     plt.close()
 
@@ -927,7 +1012,7 @@ def plot_inundation_perimeter(data: Union[str, pd.DataFrame],
     """
 
     # prepare data for plotting
-    data = PlotInundationData(data=data,
+    plot = PlotInundationData(data=data,
                               style=style,
                               font_scale=font_scale,
                               figsize=figsize,
@@ -937,24 +1022,24 @@ def plot_inundation_perimeter(data: Union[str, pd.DataFrame],
                               dpi=dpi)
 
     # plot perimeter line with points
-    plt.plot(data.perimeter, data.elevation, 'ko', data.perimeter, data.elevation, 'k')
+    plt.plot(plot.perimeter, plot.elevation, 'ko', plot.perimeter, plot.elevation, 'k')
 
     # plot mean elevation line
-    plt.axhline(data.elevation.mean(), color='black', linestyle="--", label='_nolegend_')
+    plt.axhline(plot.elevation.mean(), color='black', linestyle="--", label='_nolegend_')
 
-    p_max = data.perimeter.max()
+    p_max = plot.perimeter.max()
     x_padding = p_max * x_pad_fraction
     plt.xlim(xmin=0, xmax=p_max + x_padding)
 
-    data.ax.set(ylabel='Water Surface Elevation (m)',
+    plot.ax.set(ylabel='Water Surface Elevation (m)',
                 xlabel='Inundation Perimeter (m)',
                 title=title)
 
     # format the x-axis to show thousands as K (e.g., 15,000 as 15K)
-    data.set_xaxis_to_thousands()
+    plot.set_xaxis_to_thousands()
 
     # handle display or output options
-    data.output_handler()
+    plot.output_handler()
 
     plt.close()
 
@@ -1005,7 +1090,7 @@ def plot_inundation_area(data: Union[str, pd.DataFrame],
     """
 
     # prepare data for plotting
-    data = PlotInundationData(data=data,
+    plot = PlotInundationData(data=data,
                               style=style,
                               font_scale=font_scale,
                               figsize=figsize,
@@ -1015,28 +1100,31 @@ def plot_inundation_area(data: Union[str, pd.DataFrame],
                               dpi=dpi)
 
     # calculate the inflection point for bankfull elevation
-    bankfull_elevation, bankfull_area = calculate_bankfull_elevation(df=data.df)
+    bankfull_elevation, bankfull_area = calculate_bankfull_elevation(df=plot.df)
 
     # plot line with points for inundated area by water surface elevation
-    plt.plot(data.area, data.elevation, 'ko', data.area, data.elevation, 'k')
+    plt.plot(plot.area, plot.elevation, 'ko', plot.area, plot.elevation, 'k')
 
     # plot the point for bankfull elevation
     plt.plot(bankfull_area, bankfull_elevation, 'r^', ms=inflection_pt_size)
 
-    data.ax.set(ylabel='Water Surface Elevation (m)',
+    plot.ax.set(ylabel='Water Surface Elevation (m)',
                 xlabel='Area (m$^2$)',
                 title=title)
 
     # format the x-axis to show thousands as K (e.g., 15,000 as 15K)
-    data.set_xaxis_to_thousands()
+    plot.set_xaxis_to_thousands()
 
     # handle display or output options
-    data.output_handler()
+    plot.output_handler()
 
     plt.close()
 
 
-def plot_hypsometric_curve(df: pd.DataFrame,
+def plot_hypsometric_curve(data: Union[str, pd.DataFrame],
+                           elevation_interval: float = 0.1,
+                           min_elevation: Union[float, None] = None,
+                           max_elevation: Union[float, None] = None,
                            show_plot: bool = True,
                            save_plot: bool = False,
                            output_file: Union[str, None] = None,
@@ -1053,9 +1141,21 @@ def plot_hypsometric_curve(df: pd.DataFrame,
     """Plot a hypsometric curve as an elevation-area relationship assessment metric of the landform shape at a site.
     Provides basic metric of opportunity for inundation and habitat opportunity.
 
-    :param df:                      A pandas data frame containing data to construct a hypsometric curve.
-                                    See attim.hypsometric_curve()
-    :type df:                       pd.DataFrame
+    :param data:                    Either a full path with file name and extension to the input DEM raster or
+                                    a data frame processed using atiim.hypsometric_curve()
+    :type data:                     Union[str, pd.Dataframe]
+
+    :param elevation_interval:      Optional. Elevation sample spacing in the units of the input DEM. Set when using a
+                                    DEM raster file input.
+    :type elevation_interval:       float
+
+    :param min_elevation:           Optional.  Minimum elevation to sample from.  Default is to use the minimum
+                                    elevation of the raster as a starting point. Set when using a DEM raster file input.
+    :type min_elevation:            float
+
+    :param max_elevation:           Optional.  Maximum elevation to sample from.  Default is to use the maximum
+                                    elevation of the raster as a starting point. Set when using a DEM raster file input.
+    :type max_elevation:            float
 
     :param show_plot:               If True, plot will be displayed
     :type show_plot:                bool
@@ -1099,34 +1199,35 @@ def plot_hypsometric_curve(df: pd.DataFrame,
     """
 
     # prepare data for plotting
-    data = PlotGeneral(style=style,
-                       font_scale=font_scale,
-                       figsize=figsize,
-                       show_plot=show_plot,
-                       save_plot=save_plot,
-                       output_file=output_file,
-                       dpi=dpi)
+    plot = PlotDem(data=data,
+                   elevation_interval=elevation_interval,
+                   min_elevation=min_elevation,
+                   max_elevation=max_elevation,
+                   style=style,
+                   font_scale=font_scale,
+                   figsize=figsize,
+                   show_plot=show_plot,
+                   save_plot=save_plot,
+                   output_file=output_file,
+                   dpi=dpi)
 
     # seaborn settings
     sns.set(style=style, font_scale=font_scale)
 
-    # setup figure and axis
-    fig, ax = plt.subplots(figsize=figsize)
-
     sns.lineplot(x=x_field_name,
                  y=y_field_name,
                  marker='o',
-                 data=df,
+                 data=plot.df,
                  color=color)
 
-    ax.set(ylabel=y_label,
-           xlabel=x_label,
-           title=title)
+    plot.ax.set(ylabel=y_label,
+                xlabel=x_label,
+                title=title)
 
     # format the x-axis to show thousands as K (e.g., 15,000 as 15K)
-    data.set_xaxis_to_thousands()
+    plot.set_xaxis_to_thousands()
 
     # handle display or output options
-    data.output_handler()
+    plot.output_handler()
 
     plt.close()

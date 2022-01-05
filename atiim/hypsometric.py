@@ -6,7 +6,7 @@ from typing import Union
 
 
 def hypsometric_curve(dem_file: str,
-                      elevation_interval: float,
+                      elevation_interval: float = 0.1,
                       min_elevation: Union[float, None] = None,
                       max_elevation: Union[float, None] = None) -> pd.DataFrame:
     """Calculate a hypsometric curve as an elevation-area relationship assessment metric

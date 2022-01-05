@@ -5,5 +5,7 @@ from .plots import plot_wse_timeseries, plot_wse_cumulative_distribution, plot_w
     plot_wse_exceedance_probability, plot_inundation_hectare_hours, plot_inundation_perimeter, plot_inundation_area, \
     plot_hypsometric_curve
 
+from .package_data import SampleData
+
 
 __version__ = "1.0.0"

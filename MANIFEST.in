@@ -1,0 +1,10 @@
+include atiim/data/*.cpg
+include atiim/data/*.mgrd
+include atiim/data/*.sdat
+include atiim/data/*.xml
+include atiim/data/*.sgrd
+include atiim/data/*.dbf
+include atiim/data/*.prj
+include atiim/data/*.shp
+include atiim/data/*.shx
+include atiim/data/water_level.csv
