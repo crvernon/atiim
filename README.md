@@ -1,6 +1,6 @@
 [![build](https://github.com/crvernon/atiim/actions/workflows/build.yml/badge.svg)](https://github.com/crvernon/atiim/actions/workflows/build.yml)
 [![codecov](https://codecov.io/gh/crvernon/atiim/branch/main/graph/badge.svg?token=MUYY7WOGCP)](https://codecov.io/gh/crvernon/atiim)
-[![docs](https://github.com/crvernon/atiim/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/crvernon/atiim/actions/workflows/pages/pages-build-deployment)
+[![docs](https://github.com/crvernon/atiim/actions/workflows/pages/docs/badge.svg)](https://github.com/crvernon/atiim/actions/workflows/pages/pages-build-deployment)
 
 # atiim
 #### The Area Time Inundation Index Model
