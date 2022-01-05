@@ -16,7 +16,7 @@ setup(
     packages=find_packages(),
     url='https://github.com/crvernon/atiim',
     license='BSD-2-Clause',
-    author='André M. Colman; Chris R. Vernon',
+    author='André M. Coleman; Chris R. Vernon',
     description='The Area Time Inundation Index Model',
     long_description=readme(),
     long_description_content_type="text/markdown",
