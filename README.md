@@ -1,5 +1,6 @@
 [![build](https://github.com/crvernon/atiim/actions/workflows/build.yml/badge.svg)](https://github.com/crvernon/atiim/actions/workflows/build.yml)
 [![codecov](https://codecov.io/gh/crvernon/atiim/branch/main/graph/badge.svg?token=MUYY7WOGCP)](https://codecov.io/gh/crvernon/atiim)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5823541.svg)](https://doi.org/10.5281/zenodo.5823541)
 [![docs](https://github.com/crvernon/atiim/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/crvernon/atiim/actions/workflows/pages/pages-build-deployment)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/crvernon/atiim/main?labpath=notebooks%2Fquickstarter.ipynb)
 
