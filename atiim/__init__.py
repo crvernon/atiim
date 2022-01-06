@@ -8,4 +8,4 @@ from .plots import plot_wse_timeseries, plot_wse_cumulative_distribution, plot_w
 from .package_data import SampleData
 
 
-__version__ = "1.0.0"
+__version__ = "0.0.0"

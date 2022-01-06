@@ -10,6 +10,7 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
+
 import os
 import sys
 sys.path.insert(0, os.path.abspath('../../'))
@@ -21,7 +22,7 @@ project = 'atiim'
 copyright = '2021, Battelle Memorial Institute'
 author = 'Andre Coleman; Chris R. Vernon'
 
-version = "1.0.0"
+version = "0.0.0"
 
 
 # The full version, including alpha/beta/rc tags
