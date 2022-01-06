@@ -148,8 +148,9 @@ def simulate_inundation(dem_file: str,
                         gage_shp: str,
                         gage_data_file: str,
                         run_name: str,
-                        output_directory: Union[str, None] = None,
+                        write_raster: bool = False,
                         write_csv: bool = True,
+                        output_directory: Union[str, None] = None,
                         elevation_interval: float = 0.1,
                         hour_interval: float = 1.0,
                         n_jobs: int = 1,
@@ -169,14 +170,17 @@ def simulate_inundation(dem_file: str,
     :param gage_data_file:          Full path with file name and extension to the gage data file.
     :type gage_data_file:           str
 
-    :param output_directory:        Full path to a write-enabled directory to write output files to
-    :type output_directory:         str
-
     :param run_name:                Name of run, all lowercase and only underscore separated.
     :type run_name:                 str
 
+    :param write_raster:            Choice to write masked raster to file.
+    :type write_raster:             bool
+
     :param write_csv:               Choice to write a CSV file of inundation metric outputs
     :type write_csv:                bool
+
+    :param output_directory:        Full path to a write-enabled directory to write output files to
+    :type output_directory:         str
 
     :param elevation_interval:      Step for elevation to be processed.
     :type elevation_interval:       float
@@ -208,61 +212,56 @@ def simulate_inundation(dem_file: str,
     with rasterio.Env():
 
         # clip the input DEM to a target basin contributing area
-        masked_dem_file = create_basin_dem(basin_shp, dem_file, run_name, output_directory)
+        arr, meta = create_basin_dem(basin_shp, dem_file, run_name, write_raster, output_directory)
 
-        with rasterio.open(masked_dem_file) as src:
+        # convert the raster nodata value to numpy nan
+        arr[arr == meta['nodata']] = np.nan
 
-            # read the raster band into a number array
-            arr = src.read(1)
+        raster_min = float(np.nanmin(arr))
+        raster_max = float(np.nanmax(arr))
 
-            # convert the raster nodata value to numpy nan
-            arr[arr == src.nodata] = np.nan
+        # use the minimum bounding elevation e.g., the max of min available
+        elev_min = max([min_gage_elev, raster_min])
 
-            raster_min = float(np.nanmin(arr))
-            raster_max = float(np.nanmax(arr))
+        # use the maximum bounding elevation e.g., the min of max available
+        elev_max = min([max_gage_elev, raster_max])
 
-            # use the minimum bounding elevation e.g., the max of min available
-            elev_min = max([min_gage_elev, raster_min])
+        # construct elevation upper bounds to process for each slice
+        elev_slices = np.arange(elev_min, elev_max + elevation_interval, elevation_interval)
 
-            # use the maximum bounding elevation e.g., the min of max available
-            elev_max = min([max_gage_elev, raster_max])
+        # process all elevation slices in parallel
+        feature_list = Parallel(n_jobs=n_jobs)(
+            delayed(process_slice)(arr=arr,
+                                   upper_elev=upper_elev,
+                                   output_directory=output_directory,
+                                   gage_gdf=gage_gdf,
+                                   water_elev_freq=water_elev_freq,
+                                   run_name=run_name,
+                                   hour_interval=hour_interval,
+                                   transform=meta['transform'],
+                                   target_crs=meta['crs'])
+            for upper_elev in elev_slices)
 
-            # construct elevation upper bounds to process for each slice
-            elev_slices = np.arange(elev_min, elev_max + elevation_interval, elevation_interval)
+        # concatenate individual GeoDataFrames into a single frame
+        result_df = pd.concat(feature_list)
 
-            # process all elevation slices in parallel
-            feature_list = Parallel(n_jobs=n_jobs)(
-                delayed(process_slice)(arr=arr,
-                                       upper_elev=upper_elev,
-                                       output_directory=output_directory,
-                                       gage_gdf=gage_gdf,
-                                       water_elev_freq=water_elev_freq,
-                                       run_name=run_name,
-                                       hour_interval=hour_interval,
-                                       transform=src.transform,
-                                       target_crs=src.crs)
-                for upper_elev in elev_slices)
+        # drop geometry
+        result_df.drop(columns=['geometry'], inplace=True)
 
-            # concatenate individual GeoDataFrames into a single frame
-            result_df = pd.concat(feature_list)
+        # write data frame to file removing geometry if so desired
+        if write_csv:
 
-            # drop geometry
-            result_df.drop(columns=['geometry'], inplace=True)
+            if output_directory is None:
+                msg = 'Please pass a value for output_directory if choosing to write shapefile outputs.'
+                raise AssertionError(msg)
 
-            # write data frame to file removing geometry if so desired
-            if write_csv:
+            out_file = os.path.join(output_directory, f'inundation_metrics_{run_name}.csv')
+            result_df.to_csv(out_file, index=False)
 
-                if output_directory is None:
-                    msg = 'Please pass a value for output_directory if choosing to write shapefile outputs.'
-                    raise AssertionError(msg)
+        if verbose:
+            logging.info(f"Minimum DEM Elevation:  {round(raster_min, 2)}")
+            logging.info(f"Maximum DEM Elevation:  {round(raster_max, 2)}")
+            logging.info(f"Bounded DEM Elevation:  {round(min(elev_slices), 2)}")
+            logging.info(f"Bounded DEM Elevation:  {round(max(elev_slices), 2)}")
 
-                out_file = os.path.join(output_directory, f'inundation_metrics_{run_name}.csv')
-                result_df.to_csv(out_file, index=False)
-
-            if verbose:
-                logging.info(f"Minimum DEM Elevation:  {round(raster_min, 2)}")
-                logging.info(f"Maximum DEM Elevation:  {round(raster_max, 2)}")
-                logging.info(f"Bounded DEM Elevation:  {round(min(elev_slices), 2)}")
-                logging.info(f"Bounded DEM Elevation:  {round(max(elev_slices), 2)}")
-
-            return pd.DataFrame(result_df)
+        return pd.DataFrame(result_df)

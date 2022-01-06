@@ -1,8 +1,5 @@
-import os
-import tempfile
 import unittest
 
-import rasterio
 from rasterio.crs import CRS
 from rasterio.transform import Affine
 
@@ -22,23 +19,30 @@ class TestDEM(unittest.TestCase):
                      'crs': CRS.from_epsg(26910),
                      'transform': Affine(0.75, 0.0, 446580.0, 0.0, -0.75, 5129541.630815)}
 
-    def test_create_basin_dem(self):
+    SAMPLE_DATA = SampleData()
+
+    def test_create_basin_dem_vaid(self):
         """Tests to ensure DEM creation is valid."""
 
-        # load sample data
-        sample_data = SampleData()
+        arr, meta = create_basin_dem(basin_shp=TestDEM.SAMPLE_DATA.sample_basin_shapefile,
+                                     dem_file=TestDEM.SAMPLE_DATA.sample_dem,
+                                     run_name='test_1',
+                                     write_raster=False)
 
-        # generate a masked raster file
-        with tempfile.TemporaryDirectory() as tempdir:
+        # read in raster and compare metadata against expected
+        self.assertEqual(TestDEM.COMP_METADATA, meta)
 
-            masked_raster = create_basin_dem(basin_shp=sample_data.sample_basin_shapefile,
-                                             dem_file=sample_data.sample_dem,
-                                             run_name='test_1',
-                                             output_directory=tempdir)
+    def test_create_basin_dem_exception(self):
+        """Tests to ensure function raises expected exceptions."""
 
-            # read in raster and compare metadata against expected
-            with rasterio.open(masked_raster) as src:
-                self.assertEqual(TestDEM.COMP_METADATA, src.meta)
+        # raise assertion error when not passing output directory when write_raster is True
+        with self.assertRaises(AssertionError):
+
+            arr, meta = create_basin_dem(basin_shp=TestDEM.SAMPLE_DATA.sample_basin_shapefile,
+                                         dem_file=TestDEM.SAMPLE_DATA.sample_dem,
+                                         run_name='test_1',
+                                         write_raster=True,
+                                         output_directory=None)
 
 
 if __name__ == '__main__':
