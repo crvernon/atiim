@@ -147,8 +147,8 @@ def simulate_inundation(dem_file: str,
                         basin_shp: str,
                         gage_shp: str,
                         gage_data_file: str,
-                        output_directory: str,
                         run_name: str,
+                        output_directory: Union[str, None] = None,
                         write_csv: bool = True,
                         elevation_interval: float = 0.1,
                         hour_interval: float = 1.0,
@@ -208,9 +208,10 @@ def simulate_inundation(dem_file: str,
     with rasterio.Env():
 
         # clip the input DEM to a target basin contributing area
-        masked_dem_file = create_basin_dem(basin_shp, dem_file, output_directory, run_name)
+        masked_dem_file = create_basin_dem(basin_shp, dem_file, run_name, output_directory)
 
         with rasterio.open(masked_dem_file) as src:
+
             # read the raster band into a number array
             arr = src.read(1)
 
@@ -250,6 +251,11 @@ def simulate_inundation(dem_file: str,
 
             # write data frame to file removing geometry if so desired
             if write_csv:
+
+                if output_directory is None:
+                    msg = 'Please pass a value for output_directory if choosing to write shapefile outputs.'
+                    raise AssertionError(msg)
+
                 out_file = os.path.join(output_directory, f'inundation_metrics_{run_name}.csv')
                 result_df.to_csv(out_file, index=False)
 

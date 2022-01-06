@@ -1,5 +1,6 @@
 import os
 import logging
+from typing import Union
 
 import rasterio
 import geopandas as gpd
@@ -7,8 +8,8 @@ import geopandas as gpd
 
 def create_basin_dem(basin_shp: str,
                      dem_file: str,
-                     output_directory: str,
-                     run_name: str) -> str:
+                     run_name: str,
+                     output_directory: Union[str, None] = None) -> str:
     """Mask the input DEM using a basin geometry representative of the contributing area.
 
     :param basin_shp:               Full path with file name and extension to the target basin shapefile
@@ -17,11 +18,11 @@ def create_basin_dem(basin_shp: str,
     :param dem_file:                Full path with file name and extension to the input DEM raster file.
     :type dem_file:                 str
 
-    :param output_directory:        Full path to a write-enabled directory to write output files to
-    :type output_directory:         str
-
     :param run_name:                Name of run, all lowercase and only underscore separated.
     :type run_name:                 str
+
+    :param output_directory:        Full path to a write-enabled directory to write output files to
+    :type output_directory:         Union[str, None]
 
     :return:                        Full path with file name and extension to the masked DEM raster file
 

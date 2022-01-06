@@ -7,7 +7,7 @@
 #### The Area Time Inundation Index Model
 
 ### Purpose
-`atiim` is the Area-Time Inundatation Index Model and was created to address the challenge of rapidly characterizing spatiotemporally-complex inundation patterns in dynamic systems, such as estuarine tidal-fluvial environments.
+`atiim` is the Area-Time Inundatation Index Model which was created to address the challenge of rapidly characterizing spatiotemporally-complex inundation patterns in dynamic systems, such as estuarine tidal-fluvial environments.
 
 ### Install `atiim`
 
