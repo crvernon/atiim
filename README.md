@@ -21,7 +21,7 @@ Run `atiim` using the quicktart tutorial: [`atiim` Quickstarter](https://mybinde
 
 ### Getting started
 
-New to `atiim`?  Get familiar with what `atiim` is all about in our [Getting Started](www.google.com) docs!
+New to `atiim`?  Get familiar with what `atiim` is all about in our [Getting Started](https://crvernon.github.io/atiim/getting_started.html) docs!
 
 ### User guide
 
