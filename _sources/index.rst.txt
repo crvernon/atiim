@@ -11,9 +11,9 @@ atiim documentation
 **Date**: |today| **Version**: |version|
 
 **Useful links**:
-`Source Repository <https://github.com/immm-sfa/atiim>`_ |
-`Issues & Ideas <https://github.com/immm-sfa/atiim/issues>`_ |
-`Interactive Quickstarter <quickstarter.rst>`_
+`Source Repository <https://github.com/crvernon/atiim>`_ |
+`Issues & Ideas <https://github.com/crvernon/atiim/issues>`_ |
+`Interactive Quickstarter <https://mybinder.org/v2/gh/crvernon/atiim/main?labpath=notebooks%2Fquickstarter.ipynb>`_
 
 **atiim** is the Area-Time Inundatation Index Model and was created to address the challenge of rapidly characterizing spatiotemporally-complex inundation patterns in dynamic systems, such as estuarine tidal-fluvial environments.
 
@@ -72,7 +72,7 @@ atiim documentation
    :img-top: _static/index_contribute.svg
 
    Contributing to atiim
-   ^^^^^^^^^^^^^^^^^^^^
+   ^^^^^^^^^^^^^^^^^^^^^
 
    Report a bug or suggest a new feature.
 
@@ -88,4 +88,9 @@ atiim documentation
   :maxdepth: 2
   :hidden:
 
+  getting_started
+  user_guide
   modules
+  contributing
+  publications
+  license

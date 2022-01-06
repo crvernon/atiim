@@ -221,8 +221,8 @@
                         <span class="n">basin_shp</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
                         <span class="n">gage_shp</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
                         <span class="n">gage_data_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-                        <span class="n">output_directory</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
                         <span class="n">run_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                        <span class="n">output_directory</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                         <span class="n">write_csv</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
                         <span class="n">elevation_interval</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span>
                         <span class="n">hour_interval</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
@@ -282,9 +282,10 @@
     <span class="k">with</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">Env</span><span class="p">():</span>
 
         <span class="c1"># clip the input DEM to a target basin contributing area</span>
-        <span class="n">masked_dem_file</span> <span class="o">=</span> <span class="n">create_basin_dem</span><span class="p">(</span><span class="n">basin_shp</span><span class="p">,</span> <span class="n">dem_file</span><span class="p">,</span> <span class="n">output_directory</span><span class="p">,</span> <span class="n">run_name</span><span class="p">)</span>
+        <span class="n">masked_dem_file</span> <span class="o">=</span> <span class="n">create_basin_dem</span><span class="p">(</span><span class="n">basin_shp</span><span class="p">,</span> <span class="n">dem_file</span><span class="p">,</span> <span class="n">run_name</span><span class="p">,</span> <span class="n">output_directory</span><span class="p">)</span>
 
         <span class="k">with</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">masked_dem_file</span><span class="p">)</span> <span class="k">as</span> <span class="n">src</span><span class="p">:</span>
+
             <span class="c1"># read the raster band into a number array</span>
             <span class="n">arr</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
@@ -324,6 +325,11 @@
 
             <span class="c1"># write data frame to file removing geometry if so desired</span>
             <span class="k">if</span> <span class="n">write_csv</span><span class="p">:</span>
+
+                <span class="k">if</span> <span class="n">output_directory</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Please pass a value for output_directory if choosing to write shapefile outputs.&#39;</span>
+                    <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
                 <span class="n">out_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_directory</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;inundation_metrics_</span><span class="si">{</span><span class="n">run_name</span><span class="si">}</span><span class="s1">.csv&#39;</span><span class="p">)</span>
                 <span class="n">result_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">out_file</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 

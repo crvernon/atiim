@@ -74,6 +74,7 @@
   <h1>Source code for atiim.dem</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
 
 <span class="kn">import</span> <span class="nn">rasterio</span>
 <span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
@@ -81,8 +82,8 @@
 
 <div class="viewcode-block" id="create_basin_dem"><a class="viewcode-back" href="../../atiim.html#atiim.dem.create_basin_dem">[docs]</a><span class="k">def</span> <span class="nf">create_basin_dem</span><span class="p">(</span><span class="n">basin_shp</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
                      <span class="n">dem_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-                     <span class="n">output_directory</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-                     <span class="n">run_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+                     <span class="n">run_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                     <span class="n">output_directory</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Mask the input DEM using a basin geometry representative of the contributing area.</span>
 
 <span class="sd">    :param basin_shp:               Full path with file name and extension to the target basin shapefile</span>
@@ -91,11 +92,11 @@
 <span class="sd">    :param dem_file:                Full path with file name and extension to the input DEM raster file.</span>
 <span class="sd">    :type dem_file:                 str</span>
 
-<span class="sd">    :param output_directory:        Full path to a write-enabled directory to write output files to</span>
-<span class="sd">    :type output_directory:         str</span>
-
 <span class="sd">    :param run_name:                Name of run, all lowercase and only underscore separated.</span>
 <span class="sd">    :type run_name:                 str</span>
+
+<span class="sd">    :param output_directory:        Full path to a write-enabled directory to write output files to</span>
+<span class="sd">    :type output_directory:         Union[str, None]</span>
 
 <span class="sd">    :return:                        Full path with file name and extension to the masked DEM raster file</span>
 
