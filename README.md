@@ -1,7 +1,7 @@
 [![build](https://github.com/crvernon/atiim/actions/workflows/build.yml/badge.svg)](https://github.com/crvernon/atiim/actions/workflows/build.yml)
 [![codecov](https://codecov.io/gh/crvernon/atiim/branch/main/graph/badge.svg?token=MUYY7WOGCP)](https://codecov.io/gh/crvernon/atiim)
 [![docs](https://github.com/crvernon/atiim/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/crvernon/atiim/actions/workflows/pages/pages-build-deployment)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/crvernon/atiim/86e400d3353fbb0342d493f630fe72482bb3b830?urlpath=lab%2Ftree%2Fnoteboooks%2Fquickstarter.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/crvernon/atiim/main?labpath=notebooks%2Fquickstarter.ipynb)
 
 # atiim
 #### The Area Time Inundation Index Model
@@ -17,7 +17,7 @@ pip install atiim
 
 ### Check out a quickstart tutorial to run `atiim`
 
-Run `atiim` using the quicktart tutorial: [`atiim` Quickstarter](https://mybinder.org/v2/gh/crvernon/atiim/86e400d3353fbb0342d493f630fe72482bb3b830?urlpath=lab%2Ftree%2Fnoteboooks%2Fquickstarter.ipynb)
+Run `atiim` using the quicktart tutorial: [`atiim` Quickstarter](https://mybinder.org/v2/gh/crvernon/atiim/main?labpath=notebooks%2Fquickstarter.ipynb)
 
 ### Getting started
 
