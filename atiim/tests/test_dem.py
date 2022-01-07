@@ -8,6 +8,7 @@ from atiim.package_data import SampleData
 
 
 class TestDEM(unittest.TestCase):
+    """Test to ensure the functionality of the DEM module."""
 
     # expected metadata dictionary of masked raster
     COMP_METADATA = {'driver': 'GTiff',
