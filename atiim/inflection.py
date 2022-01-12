@@ -14,7 +14,7 @@ def calculate_bankfull_elevation(df: pd.DataFrame,
     change in sign of the second derivatives of the accumulating area with increasing elevation.  If the
     input data is noisy, you may choose to smooth the data using a Gaussian filter.
 
-    :param df:                      Desingned for output from the atiim.simulate_inundation() function.  Though can
+    :param df:                      Designed for output from the atiim.simulate_inundation() function.  Though can
                                     be used with any data frame having an area and elevation field with data.
     :type df:                       pd.DataFrame
 

@@ -1,7 +1,6 @@
 import unittest
 
 import numpy as np
-import pandas as pd
 
 import atiim.hypsometric as hyp
 from atiim.package_data import SampleData
