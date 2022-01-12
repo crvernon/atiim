@@ -149,7 +149,8 @@ def simulate_inundation(dem_file: str,
                         gage_data_file: str,
                         run_name: str,
                         write_raster: bool = False,
-                        write_csv: bool = True,
+                        write_shapefile: bool = False,
+                        write_csv: bool = False,
                         output_directory: Union[str, None] = None,
                         elevation_interval: float = 0.1,
                         hour_interval: float = 1.0,
@@ -175,6 +176,11 @@ def simulate_inundation(dem_file: str,
 
     :param write_raster:            Choice to write masked raster to file.
     :type write_raster:             bool
+
+    :param write_shapefile:         Choice to write the GeoDataFrame water level polygon as a shapefile.
+                                    Set output directory if True.  Default is True.
+
+    :type write_shapefile:          bool
 
     :param write_csv:               Choice to write a CSV file of inundation metric outputs
     :type write_csv:                bool
@@ -239,7 +245,8 @@ def simulate_inundation(dem_file: str,
                                    run_name=run_name,
                                    hour_interval=hour_interval,
                                    transform=meta['transform'],
-                                   target_crs=meta['crs'])
+                                   target_crs=meta['crs'],
+                                   write_shapefile=write_shapefile)
             for upper_elev in elev_slices)
 
         # concatenate individual GeoDataFrames into a single frame
